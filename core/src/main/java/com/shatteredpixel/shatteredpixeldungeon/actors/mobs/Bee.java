@@ -155,7 +155,7 @@ public class Bee extends Mob {
 				HashSet<Char> enemies = new HashSet<>();
 				for (Mob mob : Dungeon.level.mobs) {
 					if (!(mob == this)
-							&& Dungeon.level.distance(mob.pos,potPos) <= 3
+							&& Dungeon.level.distance(mob.pos, potPos) <= 3
 							&& mob.alignment != Alignment.NEUTRAL
 							&& !mob.isInvulnerable(getClass())
 							&& !(alignment == Alignment.ALLY && mob.alignment == Alignment.ALLY)) {

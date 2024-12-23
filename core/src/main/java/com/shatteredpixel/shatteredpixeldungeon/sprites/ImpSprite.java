@@ -34,7 +34,7 @@ public class ImpSprite extends MobSprite {
 		
 		texture( Assets.Sprites.IMP );
 		
-		TextureFilm frames = new TextureFilm( texture, 16, 16 );
+		TextureFilm frames = new TextureFilm( texture, 12, 14 );
 		
 		idle = new Animation( 10, true );
 		idle.frames( frames,
@@ -53,7 +53,10 @@ public class ImpSprite extends MobSprite {
 	@Override
 	public void link( Char ch ) {
 		super.link( ch );
-
+		
+		if (ch instanceof Imp) {
+			alpha( 0.4f );
+		}
 	}
 	
 	@Override

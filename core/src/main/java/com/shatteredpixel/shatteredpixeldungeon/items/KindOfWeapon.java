@@ -26,7 +26,9 @@ import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Actor;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Hero;
+import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Talent;
 import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
+import com.shatteredpixel.shatteredpixeldungeon.ui.ActionIndicator;
 import com.shatteredpixel.shatteredpixeldungeon.utils.BArray;
 import com.shatteredpixel.shatteredpixeldungeon.utils.GLog;
 import com.watabou.noosa.audio.Sample;
@@ -42,7 +44,7 @@ abstract public class KindOfWeapon extends EquipableItem {
 	
 	@Override
 	public boolean isEquipped( Hero hero ) {
-		return hero.belongings.weapon == this || hero.belongings.stashedWeapon == this;
+		return hero.belongings.weapon() == this;
 	}
 	
 	@Override
@@ -54,7 +56,8 @@ abstract public class KindOfWeapon extends EquipableItem {
 			
 			hero.belongings.weapon = this;
 			activate( hero );
-
+			Talent.onItemEquipped(hero, this);
+			ActionIndicator.updateIcon();
 			updateQuickslot();
 			
 			cursedKnown = true;
@@ -106,7 +109,7 @@ abstract public class KindOfWeapon extends EquipableItem {
 		return 1f;
 	}
 	
-	public float speedFactor( Char owner ) {
+	public float delayFactor(Char owner ) {
 		return 1f;
 	}
 

@@ -65,10 +65,12 @@ public class LastLevel extends Level {
 		for (int i=0; i < length(); i++) {
 			int flags = Terrain.flags[map[i]];
 			if ((flags & Terrain.PIT) != 0){
+				passable[i] = avoid[i] = false;
 				solid[i] = true;
 			}
 		}
 		for (int i = (height-ROOM_TOP+2)*width; i < length; i++){
+			passable[i] = avoid[i] = false;
 			solid[i] = true;
 		}
 		for (int i = (height-ROOM_TOP+1)*width; i < length; i++){
@@ -205,6 +207,7 @@ public class LastLevel extends Level {
 		for (int i=0; i < length(); i++) {
 			int flags = Terrain.flags[map[i]];
 			if ((flags & Terrain.PIT) != 0){
+				passable[i] = avoid[i] = false;
 				solid[i] = true;
 			}
 		}

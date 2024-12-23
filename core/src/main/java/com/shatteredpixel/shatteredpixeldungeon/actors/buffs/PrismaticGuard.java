@@ -52,12 +52,12 @@ public class PrismaticGuard extends Buff {
 		for (int i=0; i < v; i++) {
 			Mob mob = hero.visibleEnemy( i );
 			if ( mob.isAlive() && mob.state != mob.PASSIVE && mob.state != mob.WANDERING && mob.state != mob.SLEEPING && !hero.mindVisionEnemies.contains(mob)
-					&& (closest == null || Dungeon.level.distance(hero.pos,mob.pos) < Dungeon.level.distance(hero.pos,  closest.pos))) {
+					&& (closest == null || Dungeon.level.distance(hero.pos, mob.pos) < Dungeon.level.distance(hero.pos, closest.pos))) {
 				closest = mob;
 			}
 		}
 		
-		if (closest != null && Dungeon.level.distance(hero.pos,closest.pos) < 5){
+		if (closest != null && Dungeon.level.distance(hero.pos, closest.pos) < 5){
 			//spawn guardian
 			int bestPos = -1;
 			for (int i = 0; i < PathFinder.NEIGHBOURS8.length; i++) {

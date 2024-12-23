@@ -21,7 +21,6 @@
 
 package com.shatteredpixel.shatteredpixeldungeon.actors.buffs;
 
-import com.shatteredpixel.shatteredpixeldungeon.BGMPlayer;
 import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
 import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
 import com.shatteredpixel.shatteredpixeldungeon.ui.BuffIndicator;
@@ -49,6 +48,10 @@ public class LockedFloor extends Buff {
 		left += time;
 	}
 
+	public void removeTime(float time){
+		left -= time; //can go negative!
+	}
+
 	public boolean regenOn(){
 		return left >= 1;
 	}
@@ -65,12 +68,6 @@ public class LockedFloor extends Buff {
 	public void restoreFromBundle(Bundle bundle) {
 		super.restoreFromBundle(bundle);
 		left = bundle.getFloat( LEFT );
-	}
-
-	@Override
-	public void detach(){
-		BGMPlayer.playBGMWithDepth();
-		super.detach();
 	}
 
 	@Override

@@ -35,7 +35,7 @@ public class TenguSprite extends MobSprite {
 		
 		texture( Assets.Sprites.TENGU );
 		
-		TextureFilm frames = new TextureFilm( texture, 16, 18 );
+		TextureFilm frames = new TextureFilm( texture, 14, 16 );
 		
 		idle = new Animation( 2, true );
 		idle.frames( frames, 0, 0, 0, 1 );
@@ -49,7 +49,7 @@ public class TenguSprite extends MobSprite {
 		zap = attack.clone();
 		
 		die = new Animation( 8, false );
-		die.frames( frames, 8, 8, 9, 10, 11, 11, 11, 11 );
+		die.frames( frames, 8, 9, 10, 10, 10, 10, 10, 10 );
 		
 		play( run.clone() );
 	}
@@ -114,7 +114,7 @@ public class TenguSprite extends MobSprite {
 	
 	public static class TenguShuriken extends Item {
 		{
-			image = ItemSpriteSheet.FISHING_SPEAR;
+			image = ItemSpriteSheet.SHURIKEN;
 		}
 	}
 }

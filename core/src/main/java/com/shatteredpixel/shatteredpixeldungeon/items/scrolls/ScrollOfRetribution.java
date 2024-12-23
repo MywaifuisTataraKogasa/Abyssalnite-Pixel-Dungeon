@@ -40,7 +40,7 @@ public class ScrollOfRetribution extends Scroll {
 	@Override
 	public void doRead() {
 		
-		GameScene.flash( 0xFFFFFF );
+		GameScene.flash( 0x80FFFFFF );
 		
 		//scales from 0x to 1x power, maxing at ~10% HP
 		float hpPercent = (curUser.HT - curUser.HP)/(float)(curUser.HT);
@@ -61,8 +61,8 @@ public class ScrollOfRetribution extends Scroll {
 		Buff.prolong(curUser, Weakness.class, Weakness.DURATION);
 		Buff.prolong(curUser, Blindness.class, Blindness.DURATION);
 		Dungeon.observe();
-		
-		setKnown();
+
+		identify();
 		
 		readAnimation();
 		

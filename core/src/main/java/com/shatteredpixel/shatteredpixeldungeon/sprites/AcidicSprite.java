@@ -31,21 +31,21 @@ public class AcidicSprite extends ScorpioSprite {
 		
 		texture( Assets.Sprites.SCORPIO );
 		
-		TextureFilm frames = new TextureFilm( texture, 16, 16 );
+		TextureFilm frames = new TextureFilm( texture, 18, 17 );
 		
 		idle = new Animation( 12, true );
-		idle.frames( frames, 8, 8, 8, 8, 8, 8, 8, 8, 9, 8, 9, 9, 8, 9 );
+		idle.frames( frames, 14, 14, 14, 14, 14, 14, 14, 14, 15, 16, 15, 16, 15, 16 );
 		
-		run = new Animation( 16, true );
-		run.frames( frames, 10, 9 );
+		run = new Animation( 4, true );
+		run.frames( frames, 19, 20 );
 		
 		attack = new Animation( 15, false );
-		attack.frames( frames, 10, 11, 12 );
+		attack.frames( frames, 14, 17, 18 );
 		
 		zap = attack.clone();
 		
 		die = new Animation( 12, false );
-		die.frames( frames, 13, 14, 15);
+		die.frames( frames, 14, 21, 22, 23, 24 );
 		
 		play( idle );
 	}

@@ -58,11 +58,11 @@ public class Fadeleaf extends Plant {
 					return;
 					
 				}
-				
-				Buff buff = Dungeon.hero.buff(TimekeepersHourglass.timeFreeze.class);
-				if (buff != null) buff.detach();
-				buff = Dungeon.hero.buff(Swiftthistle.TimeBubble.class);
-				if (buff != null) buff.detach();
+
+				TimekeepersHourglass.timeFreeze timeFreeze = Dungeon.hero.buff(TimekeepersHourglass.timeFreeze.class);
+				if (timeFreeze != null) timeFreeze.disarmPressedTraps();
+				Swiftthistle.TimeBubble timeBubble = Dungeon.hero.buff(Swiftthistle.TimeBubble.class);
+				if (timeBubble != null) timeBubble.disarmPressedTraps();
 				
 				InterlevelScene.mode = InterlevelScene.Mode.RETURN;
 				InterlevelScene.returnDepth = Math.max(1, (Dungeon.depth - 1));
@@ -77,14 +77,14 @@ public class Fadeleaf extends Plant {
 
 			if (!Dungeon.bossLevel()) {
 
-				int count = 10;
+				int count = 20;
 				int newPos;
 				do {
 					newPos = Dungeon.level.randomRespawnCell(ch);
 					if (count-- <= 0) {
 						break;
 					}
-				} while (newPos == -1);
+				} while (newPos == -1 || Dungeon.level.secret[newPos]);
 
 				if (newPos != -1) {
 

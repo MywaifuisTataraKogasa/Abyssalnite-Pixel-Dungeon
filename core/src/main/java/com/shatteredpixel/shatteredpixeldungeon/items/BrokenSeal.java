@@ -24,15 +24,21 @@ package com.shatteredpixel.shatteredpixeldungeon.items;
 import com.shatteredpixel.shatteredpixeldungeon.Assets;
 import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.ShieldBuff;
+import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Belongings;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Hero;
+import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Talent;
 import com.shatteredpixel.shatteredpixeldungeon.items.armor.Armor;
+import com.shatteredpixel.shatteredpixeldungeon.items.bags.Bag;
 import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
 import com.shatteredpixel.shatteredpixeldungeon.scenes.GameScene;
+import com.shatteredpixel.shatteredpixeldungeon.sprites.ItemSprite;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.ItemSpriteSheet;
 import com.shatteredpixel.shatteredpixeldungeon.utils.GLog;
 import com.shatteredpixel.shatteredpixeldungeon.windows.WndBag;
+import com.shatteredpixel.shatteredpixeldungeon.windows.WndOptions;
 import com.shatteredpixel.shatteredpixeldungeon.windows.WndUseItem;
 import com.watabou.noosa.audio.Sample;
+import com.watabou.utils.Bundle;
 
 import java.util.ArrayList;
 
@@ -53,6 +59,25 @@ public class BrokenSeal extends Item {
 		defaultAction = AC_INFO;
 	}
 
+	private Armor.Glyph glyph;
+
+	public Armor.Glyph getGlyph(){
+		return glyph;
+	}
+
+	public void setGlyph( Armor.Glyph glyph ){
+		this.glyph = glyph;
+	}
+
+	public int maxShield( int armTier, int armLvl ){
+		return armTier + armLvl + Dungeon.hero.pointsInTalent(Talent.IRON_WILL);
+	}
+
+	@Override
+	public ItemSprite.Glowing glowing() {
+		return glyph != null ? glyph.glowing() : null;
+	}
+
 	@Override
 	public ArrayList<String> actions(Hero hero) {
 		ArrayList<String> actions =  super.actions(hero);
@@ -67,7 +92,7 @@ public class BrokenSeal extends Item {
 
 		if (action.equals(AC_AFFIX)){
 			curItem = this;
-			GameScene.selectItem(armorSelector, WndBag.Mode.ARMOR, Messages.get(this, "prompt"));
+			GameScene.selectItem(armorSelector);
 		} else if (action.equals(AC_INFO)) {
 			GameScene.show(new WndUseItem(null, this));
 		}
@@ -79,15 +104,55 @@ public class BrokenSeal extends Item {
 		return level() == 0;
 	}
 
-	protected static WndBag.Listener armorSelector = new WndBag.Listener() {
+	protected static WndBag.ItemSelector armorSelector = new WndBag.ItemSelector() {
+
+		@Override
+		public String textPrompt() {
+			return  Messages.get(BrokenSeal.class, "prompt");
+		}
+
+		@Override
+		public Class<?extends Bag> preferredBag(){
+			return Belongings.Backpack.class;
+		}
+
+		@Override
+		public boolean itemSelectable(Item item) {
+			return item instanceof Armor;
+		}
+
 		@Override
 		public void onSelect( Item item ) {
+			BrokenSeal seal = (BrokenSeal) curItem;
 			if (item != null && item instanceof Armor) {
 				Armor armor = (Armor)item;
 				if (!armor.levelKnown){
 					GLog.w(Messages.get(BrokenSeal.class, "unknown_armor"));
-				} else if (armor.cursed || armor.level() < 0){
+
+				} else if ((armor.cursed || armor.level() < 0)
+						&& (seal.getGlyph() == null || !seal.getGlyph().curse())){
 					GLog.w(Messages.get(BrokenSeal.class, "degraded_armor"));
+
+				} else if (armor.glyph != null && seal.getGlyph() != null
+						&& armor.glyph.getClass() != seal.getGlyph().getClass()) {
+					GameScene.show(new WndOptions(new ItemSprite(seal),
+							Messages.get(BrokenSeal.class, "choose_title"),
+							Messages.get(BrokenSeal.class, "choose_desc"),
+							armor.glyph.name(),
+							seal.getGlyph().name()){
+						@Override
+						protected void onSelect(int index) {
+							if (index == 0) seal.setGlyph(null);
+							//if index is 1, then the glyph transfer happens in affixSeal
+
+							GLog.p(Messages.get(BrokenSeal.class, "affix"));
+							Dungeon.hero.sprite.operate(Dungeon.hero.pos);
+							Sample.INSTANCE.play(Assets.Sounds.UNLOCK);
+							armor.affixSeal(seal);
+							seal.detach(Dungeon.hero.belongings.backpack);
+						}
+					});
+
 				} else {
 					GLog.p(Messages.get(BrokenSeal.class, "affix"));
 					Dungeon.hero.sprite.operate(Dungeon.hero.pos);
@@ -98,6 +163,20 @@ public class BrokenSeal extends Item {
 			}
 		}
 	};
+
+	private static final String GLYPH = "glyph";
+
+	@Override
+	public void storeInBundle(Bundle bundle) {
+		super.storeInBundle(bundle);
+		bundle.put(GLYPH, glyph);
+	}
+
+	@Override
+	public void restoreFromBundle(Bundle bundle) {
+		super.restoreFromBundle(bundle);
+		glyph = (Armor.Glyph)bundle.get(GLYPH);
+	}
 
 	public static class WarriorShield extends ShieldBuff {
 
@@ -134,8 +213,8 @@ public class BrokenSeal extends Item {
 		}
 
 		public synchronized int maxShield() {
-			if (armor != null && armor.isEquipped((Hero)target)) {
-				return 1 + armor.tier + armor.level();
+			if (armor != null && armor.isEquipped((Hero)target) && armor.checkSeal() != null) {
+				return armor.checkSeal().maxShield(armor.tier, armor.level());
 			} else {
 				return 0;
 			}
@@ -144,12 +223,14 @@ public class BrokenSeal extends Item {
 		@Override
 		//logic edited slightly as buff should not detach
 		public int absorbDamage(int dmg) {
+			if (shielding() <= 0) return dmg;
+
 			if (shielding() >= dmg){
 				decShield(dmg);
 				dmg = 0;
 			} else {
 				dmg -= shielding();
-				setShield(0);
+				decShield(shielding());
 			}
 			return dmg;
 		}

@@ -23,41 +23,36 @@ package com.shatteredpixel.shatteredpixeldungeon.windows;
 
 import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
 import com.shatteredpixel.shatteredpixeldungeon.items.Item;
-import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
 import com.shatteredpixel.shatteredpixeldungeon.ui.RedButton;
+import com.shatteredpixel.shatteredpixeldungeon.ui.Window;
 
 import java.util.ArrayList;
 
 public class WndUseItem extends WndInfoItem {
-	
-	//only one wnduseitem can appear at a time
-	private static WndUseItem INSTANCE;
 
 	private static final float BUTTON_HEIGHT	= 16;
 	
 	private static final float GAP	= 2;
 	
-	public WndUseItem(final WndBag owner, final Item item ) {
+	public WndUseItem( final Window owner, final Item item ) {
 		
 		super(item);
+
+		float y = height;
 		
-		if( INSTANCE != null ){
-			INSTANCE.hide();
-		}
-		INSTANCE = this;
-	
-		float y = height + GAP;
-		
-		if (Dungeon.hero.isAlive()) {
+		if (Dungeon.hero.isAlive() && Dungeon.hero.belongings.contains(item)) {
+			y += GAP;
 			ArrayList<RedButton> buttons = new ArrayList<>();
 			for (final String action : item.actions( Dungeon.hero )) {
 				
-				RedButton btn = new RedButton( Messages.get(item, "ac_" + action), 8 ) {
+				RedButton btn = new RedButton( item.actionName(action, Dungeon.hero), 8 ) {
 					@Override
 					protected void onClick() {
 						hide();
 						if (owner != null && owner.parent != null) owner.hide();
-						if (Dungeon.hero.isAlive()) item.execute( Dungeon.hero, action );
+						if (Dungeon.hero.isAlive() && Dungeon.hero.belongings.contains(item)){
+							item.execute( Dungeon.hero, action );
+						}
 					}
 				};
 				btn.setSize( btn.reqWidth(), BUTTON_HEIGHT );
@@ -162,14 +157,6 @@ public class WndUseItem extends WndInfoItem {
 		}
 		
 		return y - 1;
-	}
-	
-	@Override
-	public void hide() {
-		super.hide();
-		if (INSTANCE == this){
-			INSTANCE = null;
-		}
 	}
 
 }

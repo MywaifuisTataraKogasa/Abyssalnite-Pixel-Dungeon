@@ -23,16 +23,15 @@ package com.shatteredpixel.shatteredpixeldungeon.items.food;
 
 import com.shatteredpixel.shatteredpixeldungeon.Assets;
 import com.shatteredpixel.shatteredpixeldungeon.Badges;
+import com.shatteredpixel.shatteredpixeldungeon.Challenges;
+import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
 import com.shatteredpixel.shatteredpixeldungeon.Statistics;
-import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.AbyssalInfection;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Buff;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Hunger;
-import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Recharging;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Hero;
-import com.shatteredpixel.shatteredpixeldungeon.effects.Speck;
+import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Talent;
 import com.shatteredpixel.shatteredpixeldungeon.effects.SpellSprite;
 import com.shatteredpixel.shatteredpixeldungeon.items.Item;
-import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.ScrollOfRecharging;
 import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.ItemSpriteSheet;
 import com.shatteredpixel.shatteredpixeldungeon.utils.GLog;
@@ -46,13 +45,13 @@ public class Food extends Item {
 	
 	public static final String AC_EAT	= "EAT";
 	
-	public float energy = 300f;
-	public float clean = 35f;
-	public String message = Messages.get(this, "eat_msg");
+	public float energy = Hunger.HUNGRY;
 	
 	{
 		stackable = true;
 		image = ItemSpriteSheet.RATION;
+
+		defaultAction = AC_EAT;
 
 		bones = true;
 	}
@@ -74,47 +73,39 @@ public class Food extends Item {
 			detach( hero.belongings.backpack );
 			
 			satisfy(hero);
-			cureinfc(hero);
-			GLog.i( message );
+			GLog.i( Messages.get(this, "eat_msg") );
 			
-			foodProc( hero );
-
 			hero.sprite.operate( hero.pos );
 			hero.busy();
 			SpellSprite.show( hero, SpellSprite.FOOD );
 			Sample.INSTANCE.play( Assets.Sounds.EAT );
+			
+			hero.spend( eatingTime() );
 
-			hero.spend( TIME_TO_EAT );
-
+			Talent.onFoodEaten(hero, energy, this);
+			
 			Statistics.foodEaten++;
 			Badges.validateFoodEaten();
-
+			
 		}
 	}
 
-
+	protected float eatingTime(){
+		if (Dungeon.hero.hasTalent(Talent.IRON_STOMACH)
+			|| Dungeon.hero.hasTalent(Talent.ENERGIZING_MEAL)
+			|| Dungeon.hero.hasTalent(Talent.MYSTICAL_MEAL)
+			|| Dungeon.hero.hasTalent(Talent.INVIGORATING_MEAL)){
+			return TIME_TO_EAT - 2;
+		} else {
+			return TIME_TO_EAT;
+		}
+	}
+	
 	protected void satisfy( Hero hero ){
-		Buff.affect(hero, Hunger.class).satisfy( energy );
-	}
-	protected void cureinfc( Hero hero ){
-		Buff.affect(hero, AbyssalInfection.class).cureinfc( clean );
-	}
-	public static void foodProc( Hero hero ){
-		switch (hero.heroClass) {
-			case WARRIOR:
-				if (hero.HP < hero.HT) {
-					hero.HP = Math.min( hero.HP + 5, hero.HT );
-					hero.sprite.emitter().burst( Speck.factory( Speck.HEALING ), 1 );
-				}
-				break;
-			case MAGE:
-				//1 charge
-				Buff.affect( hero, Recharging.class, 4f );
-				ScrollOfRecharging.charge( hero );
-				break;
-			case ROGUE:
-			case HUNTRESS:
-				break;
+		if (Dungeon.isChallenged(Challenges.NO_FOOD)){
+			Buff.affect(hero, Hunger.class).satisfy(energy/3f);
+		} else {
+			Buff.affect(hero, Hunger.class).satisfy(energy);
 		}
 	}
 	

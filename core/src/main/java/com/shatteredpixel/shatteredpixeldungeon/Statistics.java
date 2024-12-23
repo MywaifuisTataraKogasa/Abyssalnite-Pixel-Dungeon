@@ -24,10 +24,7 @@ package com.shatteredpixel.shatteredpixeldungeon;
 import com.watabou.utils.Bundle;
 
 public class Statistics {
-
-
-	public static int activeTownMobs;
-
+	
 	public static int goldCollected;
 	public static int deepestFloor;
 	public static int enemiesSlain;
@@ -35,12 +32,6 @@ public class Statistics {
 	public static int potionsCooked;
 	public static int piranhasKilled;
 	public static int ankhsUsed;
-	public static int killcount;
-
-	public static boolean FirstActive;
-	public static boolean SecondActive;
-	public static boolean ThirdActive;
-	public static boolean FourthActive;
 	
 	//used for hero unlock badges
 	public static int upgradesUsed;
@@ -65,10 +56,7 @@ public class Statistics {
 		potionsCooked	= 0;
 		piranhasKilled	= 0;
 		ankhsUsed		= 0;
-
-		killcount       = 0;
-		activeTownMobs  = 0;
-
+		
 		upgradesUsed    = 0;
 		sneakAttacks    = 0;
 		thrownAssists   = 0;
@@ -78,11 +66,6 @@ public class Statistics {
 		duration	= 0;
 		
 		qualifiedForNoKilling = false;
-
-		FirstActive = false;
-		SecondActive = false;
-		ThirdActive = false;
-		FourthActive = false;
 		
 		amuletObtained = false;
 		
@@ -103,15 +86,10 @@ public class Statistics {
 	private static final String SPAWNERS	= "spawnersAlive";
 	
 	private static final String DURATION	= "duration";
-	private static String KILLCOUNT = "killcount";
 
-	private static String ACTMOBS = "activemobs";
+	private static final String NO_KILLING_QUALIFIED	= "qualifiedForNoKilling";
+	
 	private static final String AMULET		= "amuletObtained";
-
-	private static final String firstactive = "firstactive ";
-	private static final String secondactive = "secondactive ";
-	private static final String thirdactive = "thirdactive ";
-	private static final String fourthactive = "fourthactive";
 	
 	public static void storeInBundle( Bundle bundle ) {
 		bundle.put( GOLD,		goldCollected );
@@ -121,9 +99,7 @@ public class Statistics {
 		bundle.put( ALCHEMY,	potionsCooked );
 		bundle.put( PIRANHAS,	piranhasKilled );
 		bundle.put( ANKHS,		ankhsUsed );
-
-		bundle.put(ACTMOBS,activeTownMobs);
-
+		
 		bundle.put( UPGRADES,   upgradesUsed );
 		bundle.put( SNEAKS,		sneakAttacks );
 		bundle.put( THROWN,		thrownAssists );
@@ -131,13 +107,10 @@ public class Statistics {
 		bundle.put( SPAWNERS,	spawnersAlive );
 		
 		bundle.put( DURATION,	duration );
-		bundle.put( KILLCOUNT, killcount );
-		bundle.put( AMULET,		amuletObtained );
 
-		bundle.put(firstactive,FirstActive);
-		bundle.put(secondactive,SecondActive);
-		bundle.put(thirdactive,ThirdActive);
-		bundle.put(fourthactive,FourthActive);
+		bundle.put(NO_KILLING_QUALIFIED, qualifiedForNoKilling);
+		
+		bundle.put( AMULET,		amuletObtained );
 	}
 	
 	public static void restoreFromBundle( Bundle bundle ) {
@@ -156,15 +129,10 @@ public class Statistics {
 		spawnersAlive   = bundle.getInt( SPAWNERS );
 		
 		duration		= bundle.getFloat( DURATION );
-		killcount = bundle.getInt(KILLCOUNT);
 
-		activeTownMobs = bundle.getInt(ACTMOBS);
-
+		qualifiedForNoKilling = bundle.getBoolean( NO_KILLING_QUALIFIED );
+		
 		amuletObtained	= bundle.getBoolean( AMULET );
-		FirstActive= bundle.getBoolean(firstactive);
-		SecondActive = bundle.getBoolean(secondactive);
-		ThirdActive = bundle.getBoolean(thirdactive);
-		FourthActive = bundle.getBoolean(fourthactive);
 	}
 	
 	public static void preview( GamesInProgress.Info info, Bundle bundle ){

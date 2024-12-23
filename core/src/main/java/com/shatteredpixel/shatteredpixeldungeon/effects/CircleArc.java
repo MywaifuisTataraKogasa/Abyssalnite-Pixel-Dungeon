@@ -113,7 +113,7 @@ public class CircleArc extends Visual {
 		
 		dirty = false;
 		float v[] = new float[4];
-
+		
 		((Buffer)indices).position( 0 );
 		((Buffer)vertices).position( 0 );
 		

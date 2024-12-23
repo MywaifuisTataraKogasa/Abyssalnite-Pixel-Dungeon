@@ -27,10 +27,12 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Buff;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Haste;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.HeroSubClass;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.Mob;
+import com.shatteredpixel.shatteredpixeldungeon.levels.traps.Trap;
 import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.CharSprite;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.ItemSpriteSheet;
 import com.shatteredpixel.shatteredpixeldungeon.ui.BuffIndicator;
+import com.watabou.noosa.Image;
 import com.watabou.noosa.particles.Emitter;
 import com.watabou.utils.Bundle;
 
@@ -75,7 +77,12 @@ public class Swiftthistle extends Plant {
 		
 		@Override
 		public int icon() {
-			return BuffIndicator.SLOW;
+			return BuffIndicator.TIME;
+		}
+
+		@Override
+		public void tintIcon(Image icon) {
+			icon.hardlight(1f, 1f, 0);
 		}
 
 		@Override
@@ -99,22 +106,34 @@ public class Swiftthistle extends Plant {
 		
 		public void processTime(float time){
 			left -= time;
-			
-			if (left <= 0){
+
+			//use 1/1,000 to account for rounding errors
+			if (left < -0.001f){
 				detach();
 			}
 			
 		}
 		
 		public void setDelayedPress(int cell){
-			if (!presses.contains(cell))
+			if (!presses.contains(cell)) {
 				presses.add(cell);
+			}
 		}
-		
-		private void triggerPresses(){
-			for (int cell : presses)
+
+		public void triggerPresses() {
+			for (int cell : presses) {
 				Dungeon.level.pressCell(cell);
+			}
 			
+			presses = new ArrayList<>();
+		}
+
+		public void disarmPressedTraps(){
+			for (int cell : presses){
+				Trap t = Dungeon.level.traps.get(cell);
+				if (t != null) t.disarm();
+			}
+
 			presses = new ArrayList<>();
 		}
 		

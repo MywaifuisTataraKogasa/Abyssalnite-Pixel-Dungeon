@@ -23,7 +23,7 @@ package com.shatteredpixel.shatteredpixeldungeon.sprites;
 
 import com.shatteredpixel.shatteredpixeldungeon.Assets;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
-import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.NewDM300;
+import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.DM300;
 import com.shatteredpixel.shatteredpixeldungeon.effects.MagicMissile;
 import com.shatteredpixel.shatteredpixeldungeon.effects.particles.BlastParticle;
 import com.shatteredpixel.shatteredpixeldungeon.effects.particles.SparkParticle;
@@ -45,13 +45,15 @@ public class DM300Sprite extends MobSprite {
 		
 		texture( Assets.Sprites.DM300 );
 		
-		setAnimations(false);
+		updateChargeState(false);
 	}
 
-	private void setAnimations( boolean enraged ){
+	public void updateChargeState( boolean enraged ){
+		if (superchargeSparks != null) superchargeSparks.on = enraged;
+
 		int c = enraged ? 10 : 0;
 
-		TextureFilm frames = new TextureFilm( texture, 30, 18 );
+		TextureFilm frames = new TextureFilm( texture, 25, 22 );
 
 		idle = new Animation( enraged ? 15 : 10, true );
 		idle.frames( frames, c+0, c+1 );
@@ -92,10 +94,10 @@ public class DM300Sprite extends MobSprite {
 				new Callback() {
 					@Override
 					public void call() {
-						((NewDM300)ch).onZapComplete();
+						((DM300)ch).onZapComplete();
 					}
 				} );
-		Sample.INSTANCE.play( Assets.Sounds.PUFF );
+		Sample.INSTANCE.play( Assets.Sounds.GAS );
 	}
 
 	public void charge(){
@@ -109,8 +111,6 @@ public class DM300Sprite extends MobSprite {
 		Camera.main.shake( 3, 0.7f );
 	}
 
-	private boolean exploded = false;
-
 	@Override
 	public void onComplete( Animation anim ) {
 
@@ -119,13 +119,12 @@ public class DM300Sprite extends MobSprite {
 		}
 
 		if (anim == slam){
-			((NewDM300)ch).onSlamComplete();
+			((DM300)ch).onSlamComplete();
 		}
 
 		super.onComplete( anim );
 		
-		if (anim == die && !exploded) {
-			exploded = true;
+		if (anim == die) {
 			Sample.INSTANCE.play(Assets.Sounds.BLAST);
 			emitter().burst( BlastParticle.FACTORY, 100 );
 			killAndErase();
@@ -147,9 +146,8 @@ public class DM300Sprite extends MobSprite {
 		superchargeSparks.pour(SparkParticle.STATIC, 0.05f);
 		superchargeSparks.on = false;
 
-		if (ch instanceof NewDM300 && ((NewDM300) ch).isSupercharged()){
-			setAnimations(true);
-			superchargeSparks.on = true;
+		if (ch instanceof DM300 && ((DM300) ch).isSupercharged()){
+			updateChargeState(true);
 		}
 	}
 
@@ -159,11 +157,6 @@ public class DM300Sprite extends MobSprite {
 
 		if (superchargeSparks != null){
 			superchargeSparks.visible = visible;
-			if (ch instanceof NewDM300
-					&& ((NewDM300) ch).isSupercharged() != superchargeSparks.on){
-				superchargeSparks.on = ((NewDM300) ch).isSupercharged();
-				setAnimations(((NewDM300) ch).isSupercharged());
-			}
 		}
 	}
 

@@ -24,7 +24,6 @@ package com.shatteredpixel.shatteredpixeldungeon.sprites;
 import com.shatteredpixel.shatteredpixeldungeon.Assets;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.Pylon;
-import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.SeptiumPillar;
 import com.shatteredpixel.shatteredpixeldungeon.effects.particles.BlastParticle;
 import com.watabou.noosa.TextureFilm;
 import com.watabou.noosa.audio.Sample;
@@ -68,9 +67,6 @@ public class PylonSprite extends MobSprite {
 		renderShadow = false;
 	}
 
-
-
-
 	@Override
 	public void place(int cell) {
 		if (parent != null) parent.bringToFront(this);
@@ -98,5 +94,10 @@ public class PylonSprite extends MobSprite {
 			flash();
 		}
 		super.onComplete(anim);
+	}
+
+	@Override
+	public int blood() {
+		return 0xFFFFFF88;
 	}
 }

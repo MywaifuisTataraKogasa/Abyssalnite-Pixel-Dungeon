@@ -80,6 +80,10 @@ public class AlchemyScene extends PixelScene {
 	private RedButton btnCombine;
 	
 	private static final int BTN_SIZE	= 28;
+
+	{
+		inGameScene = true;
+	}
 	
 	@Override
 	public void create() {
@@ -102,6 +106,7 @@ public class AlchemyScene extends PixelScene {
 				Blending.enable();
 			}
 		};
+		water.autoAdjust = true;
 		add(water);
 		
 		Image im = new Image(TextureCache.createGradient(0x66000000, 0x88000000, 0xAA000000, 0xCC000000, 0xFF000000));
@@ -150,7 +155,16 @@ public class AlchemyScene extends PixelScene {
 							slot.item(new WndBag.Placeholder(ItemSpriteSheet.SOMETHING));
 							updateState();
 						}
-						AlchemyScene.this.addToFront(WndBag.lastBag( itemSelector, WndBag.Mode.ALCHEMY, Messages.get(AlchemyScene.class, "select")));
+						AlchemyScene.this.addToFront(WndBag.getBag( itemSelector ));
+					}
+
+					@Override
+					protected boolean onLongClick() {
+						if (item != null){
+							Game.scene().addToFront(new WndInfoItem(item));
+							return true;
+						}
+						return false;
 					}
 				};
 				inputs[i].setRect(left + 10, pos, BTN_SIZE, BTN_SIZE);
@@ -305,7 +319,18 @@ public class AlchemyScene extends PixelScene {
 		Game.switchScene(GameScene.class);
 	}
 	
-	protected WndBag.Listener itemSelector = new WndBag.Listener() {
+	protected WndBag.ItemSelector itemSelector = new WndBag.ItemSelector() {
+
+		@Override
+		public String textPrompt() {
+			return Messages.get(AlchemyScene.class, "select");
+		}
+
+		@Override
+		public boolean itemSelectable(Item item) {
+			return Recipe.usableInRecipe(item);
+		}
+
 		@Override
 		public void onSelect( Item item ) {
 			synchronized (inputs) {
@@ -517,12 +542,20 @@ public class AlchemyScene extends PixelScene {
 				protected void onClick() {
 					ItemButton.this.onClick();
 				}
+
+				@Override
+				protected boolean onLongClick() {
+					return ItemButton.this.onLongClick();
+				}
 			};
 			slot.enable(true);
 			add( slot );
 		}
 		
 		protected void onClick() {}
+		protected boolean onLongClick() {
+			return false;
+		}
 		
 		@Override
 		protected void layout() {

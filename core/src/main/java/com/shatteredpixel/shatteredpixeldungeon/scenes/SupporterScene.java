@@ -78,7 +78,7 @@ public class SupporterScene extends PixelScene {
 			@Override
 			protected void onClick() {
 				super.onClick();
-				String link = "https://jq.qq.com/?_wv=1027&k=xrFX2a4P";
+				String link = "https://www.patreon.com/ShatteredPixel";
 				//tracking codes, so that the website knows where this pageview came from
 				link += "?utm_source=shatteredpd";
 				link += "&utm_medium=supporter_page";
@@ -125,12 +125,13 @@ public class SupporterScene extends PixelScene {
 			if (Messages.lang() != Languages.ENGLISH) {
 				message += "\n" + Messages.get(SupporterScene.class, "patreon_english");
 			}
-			message += "\n\n- CodenameE";
+			message += "\n\n- Evan";
 
 			text = PixelScene.renderTextBlock(message, 6);
 			add(text);
 
 			icon = Icons.get(Icons.SHPX);
+			add(icon);
 
 		}
 

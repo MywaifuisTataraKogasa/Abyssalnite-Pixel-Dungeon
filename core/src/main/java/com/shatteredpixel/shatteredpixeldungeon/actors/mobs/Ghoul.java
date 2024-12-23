@@ -25,10 +25,8 @@ import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Actor;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Buff;
-import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Burning;
+import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.ChampionEnemy;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Corruption;
-import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.DreadPlague;
-import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Terror;
 import com.shatteredpixel.shatteredpixeldungeon.effects.Pushing;
 import com.shatteredpixel.shatteredpixeldungeon.items.Gold;
 import com.shatteredpixel.shatteredpixeldungeon.levels.features.Chasm;
@@ -58,7 +56,7 @@ public class Ghoul extends Mob {
 		loot = Gold.class;
 		lootChance = 0.2f;
 		
-		properties.add(Property.DEMONIC);
+		properties.add(Property.UNDEAD);
 	}
 
 	@Override
@@ -86,24 +84,7 @@ public class Ghoul extends Mob {
 
 	private static final String PARTNER_ID = "partner_id";
 	private static final String TIMES_DOWNED = "times_downed";
-
-	@Override
-	public int attackProc( Char enemy, int damage ) {
-		damage = super.attackProc( enemy, damage );
-
-		if (Random.Int( 6 ) == 0) {
-			Buff.affect( enemy, DreadPlague.class ).set( DreadPlague.DURATION );
-		}
-
-		return damage;
-	}
-
-	{
-		immunities.add( Burning.class );
-		immunities.add( Terror.class );
-		immunities.add( DreadPlague.class );
-	}
-
+	
 	@Override
 	public void storeInBundle( Bundle bundle ) {
 		super.storeInBundle( bundle );
@@ -148,6 +129,11 @@ public class Ghoul extends Mob {
 				if (sprite.visible) {
 					Actor.addDelayed( new Pushing( child, pos, child.pos ), -1 );
 				}
+
+				for (Buff b : buffs(ChampionEnemy.class)){
+					Buff.affect( child, b.getClass());
+				}
+
 			}
 			
 		}
@@ -179,8 +165,10 @@ public class Ghoul extends Mob {
 	protected synchronized void onRemove() {
 		if (beingLifeLinked) {
 			for (Buff buff : buffs()) {
-				//corruption and king damager are preserved when removed via life link
-				if (!(buff instanceof Corruption) && !(buff instanceof DwarfKing.KingDamager)) {
+				//corruption, champion, and king damager are preserved when removed via life link
+				if (!(buff instanceof Corruption)
+						&& (!(buff instanceof ChampionEnemy))
+						&& !(buff instanceof DwarfKing.KingDamager)) {
 					buff.detach();
 				}
 			}
@@ -210,7 +198,7 @@ public class Ghoul extends Mob {
 			enemySeen = false;
 			
 			Ghoul partner = (Ghoul) Actor.findById( partnerID );
-			if (partner != null && (partner.state != partner.WANDERING || Dungeon.level.distance( pos,partner.target) > 1)){
+			if (partner != null && (partner.state != partner.WANDERING || Dungeon.level.distance( pos,  partner.target) > 1)){
 				target = partner.pos;
 				int oldPos = pos;
 				if (getCloser( target )){
@@ -235,6 +223,11 @@ public class Ghoul extends Mob {
 		public boolean act() {
 			ghoul.sprite.visible = Dungeon.level.heroFOV[ghoul.pos];
 
+			if (target.alignment != ghoul.alignment){
+				detach();
+				return true;
+			}
+
 			if (target.fieldOfView == null){
 				target.fieldOfView = new boolean[Dungeon.level.length()];
 				Dungeon.level.updateFieldOfView( target, target.fieldOfView );
@@ -253,7 +246,6 @@ public class Ghoul extends Mob {
 
 			turnsToRevive--;
 			if (turnsToRevive <= 0){
-				ghoul.HP = Math.round(ghoul.HT/10f);
 				if (Actor.findChar( ghoul.pos ) != null) {
 					ArrayList<Integer> candidates = new ArrayList<>();
 					for (int n : PathFinder.NEIGHBOURS8) {
@@ -272,6 +264,7 @@ public class Ghoul extends Mob {
 						return true;
 					}
 				}
+				ghoul.HP = Math.round(ghoul.HT/10f);
 				Actor.add(ghoul);
 				ghoul.spend(-ghoul.cooldown());
 				Dungeon.level.mobs.add(ghoul);
@@ -335,7 +328,7 @@ public class Ghoul extends Mob {
 						ch.fieldOfView = new boolean[Dungeon.level.length()];
 						Dungeon.level.updateFieldOfView( ch, ch.fieldOfView );
 					}
-					if (ch.fieldOfView[dieing.pos] || Dungeon.level.distance(ch.pos,dieing.pos) < 4){
+					if (ch.fieldOfView[dieing.pos] || Dungeon.level.distance(ch.pos, dieing.pos) < 4){
 						return (Ghoul) ch;
 					}
 				}

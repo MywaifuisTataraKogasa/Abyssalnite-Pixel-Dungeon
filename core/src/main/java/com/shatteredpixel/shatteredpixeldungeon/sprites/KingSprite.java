@@ -31,7 +31,7 @@ public class KingSprite extends MobSprite {
 		
 		texture( Assets.Sprites.KING );
 		
-		TextureFilm frames = new TextureFilm( texture, 48, 48 );
+		TextureFilm frames = new TextureFilm( texture, 16, 16 );
 		
 		idle = new Animation( 12, true );
 		idle.frames( frames, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 2 );

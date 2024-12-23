@@ -21,15 +21,14 @@
 
 package com.shatteredpixel.shatteredpixeldungeon.actors.mobs;
 
-import com.shatteredpixel.shatteredpixeldungeon.Assets;
 import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Actor;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Adrenaline;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Buff;
+import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.ChampionEnemy;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Corruption;
 import com.shatteredpixel.shatteredpixeldungeon.effects.Beam;
-import com.shatteredpixel.shatteredpixeldungeon.effects.CellEmitter;
 import com.shatteredpixel.shatteredpixeldungeon.effects.Pushing;
 import com.shatteredpixel.shatteredpixeldungeon.effects.Speck;
 import com.shatteredpixel.shatteredpixeldungeon.items.Item;
@@ -38,8 +37,6 @@ import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.ScrollOfTeleportat
 import com.shatteredpixel.shatteredpixeldungeon.scenes.GameScene;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.NecromancerSprite;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.SkeletonSprite;
-import com.watabou.noosa.audio.Sample;
-import com.watabou.noosa.particles.Emitter;
 import com.watabou.utils.Bundle;
 import com.watabou.utils.PathFinder;
 import com.watabou.utils.Random;
@@ -49,8 +46,8 @@ public class Necromancer extends Mob {
 	{
 		spriteClass = NecromancerSprite.class;
 		
-		HP = HT = 35;
-		defenseSkill = 13;
+		HP = HT = 40;
+		defenseSkill = 14;
 		
 		EXP = 7;
 		maxLvl = 14;
@@ -64,10 +61,9 @@ public class Necromancer extends Mob {
 	}
 	
 	public boolean summoning = false;
-	private Emitter summoningEmitter = null;
-	private int summoningPos = -1;
+	public int summoningPos = -1;
 	
-	private boolean firstSummon = true;
+	protected boolean firstSummon = true;
 	
 	private NecroSkeleton mySkeleton;
 	private int storedSkeletonID = -1;
@@ -76,23 +72,9 @@ public class Necromancer extends Mob {
 	protected boolean act() {
 		if (summoning && state != HUNTING){
 			summoning = false;
-			updateSpriteState();
+			if (sprite instanceof NecromancerSprite) ((NecromancerSprite) sprite).cancelSummoning();
 		}
 		return super.act();
-	}
-
-	@Override
-	public void updateSpriteState() {
-		super.updateSpriteState();
-		
-		if (summoning && summoningEmitter == null){
-			summoningEmitter = CellEmitter.get( summoningPos );
-			summoningEmitter.pour(Speck.factory(Speck.RATTLE), 0.2f);
-			sprite.zap( summoningPos );
-		} else if (!summoning && summoningEmitter != null){
-			summoningEmitter.on = false;
-			summoningEmitter = null;
-		}
 	}
 	
 	@Override
@@ -126,14 +108,14 @@ public class Necromancer extends Mob {
 			mySkeleton.die(null);
 		}
 		
-		if (summoningEmitter != null){
-			summoningEmitter.on = false;
-			summoningEmitter = null;
-		}
-		
 		super.die(cause);
 	}
-	
+
+	@Override
+	protected boolean canAttack(Char enemy) {
+		return false;
+	}
+
 	private static final String SUMMONING = "summoning";
 	private static final String FIRST_SUMMON = "first_summon";
 	private static final String SUMMONING_POS = "summoning_pos";
@@ -149,6 +131,8 @@ public class Necromancer extends Mob {
 		}
 		if (mySkeleton != null){
 			bundle.put( MY_SKELETON, mySkeleton.id() );
+		} else if (storedSkeletonID != -1){
+			bundle.put( MY_SKELETON, storedSkeletonID );
 		}
 	}
 	
@@ -178,9 +162,9 @@ public class Necromancer extends Mob {
 			}
 			
 			mySkeleton.HP = Math.min(mySkeleton.HP + 5, mySkeleton.HT);
-			mySkeleton.sprite.emitter().burst( Speck.factory( Speck.HEALING ), 1 );
+			if (mySkeleton.sprite.visible) mySkeleton.sprite.emitter().burst( Speck.factory( Speck.HEALING ), 1 );
 			
-			//otherwise give it adrenaline
+		//otherwise give it adrenaline
 		} else if (mySkeleton.buff(Adrenaline.class) == null) {
 
 			if (sprite.visible || mySkeleton.sprite.visible) {
@@ -191,6 +175,54 @@ public class Necromancer extends Mob {
 		}
 		
 		next();
+	}
+
+	public void summonMinion(){
+		if (Actor.findChar(summoningPos) != null) {
+			int pushPos = pos;
+			for (int c : PathFinder.NEIGHBOURS8) {
+				if (Actor.findChar(summoningPos + c) == null
+						&& Dungeon.level.passable[summoningPos + c]
+						&& (Dungeon.level.openSpace[summoningPos + c] || !hasProp(Actor.findChar(summoningPos), Property.LARGE))
+						&& Dungeon.level.trueDistance(pos, summoningPos + c) > Dungeon.level.trueDistance(pos, pushPos)) {
+					pushPos = summoningPos + c;
+				}
+			}
+
+			//push enemy, or wait a turn if there is no valid pushing position
+			if (pushPos != pos) {
+				Char ch = Actor.findChar(summoningPos);
+				Actor.addDelayed( new Pushing( ch, ch.pos, pushPos ), -1 );
+
+				ch.pos = pushPos;
+				Dungeon.level.occupyCell(ch );
+
+			} else {
+
+				Char blocker = Actor.findChar(summoningPos);
+				if (blocker.alignment != alignment){
+					blocker.damage( Random.NormalIntRange(2, 10), this );
+				}
+
+				spend(TICK);
+				return;
+			}
+		}
+
+		summoning = firstSummon = false;
+
+		mySkeleton = new NecroSkeleton();
+		mySkeleton.pos = summoningPos;
+		GameScene.add( mySkeleton );
+		Dungeon.level.occupyCell( mySkeleton );
+		((NecromancerSprite)sprite).finishSummoning();
+
+		if (buff(Corruption.class) != null){
+			Buff.affect(mySkeleton, Corruption.class);
+		}
+		for (Buff b : buffs(ChampionEnemy.class)){
+			Buff.affect( mySkeleton, b.getClass());
+		}
 	}
 	
 	private class Hunting extends Mob.Hunting{
@@ -208,47 +240,7 @@ public class Necromancer extends Mob {
 			}
 			
 			if (summoning){
-				
-				//push anything on summoning spot away, to the furthest valid cell
-				if (Actor.findChar(summoningPos) != null) {
-					int pushPos = pos;
-					for (int c : PathFinder.NEIGHBOURS8) {
-						if (Actor.findChar(summoningPos + c) == null
-								&& Dungeon.level.passable[summoningPos + c]
-								&& Dungeon.level.trueDistance(pos, summoningPos + c) > Dungeon.level.trueDistance(pos, pushPos)) {
-							pushPos = summoningPos + c;
-						}
-					}
-					
-					//push enemy, or wait a turn if there is no valid pushing position
-					if (pushPos != pos) {
-						Char ch = Actor.findChar(summoningPos);
-						Actor.addDelayed( new Pushing( ch, ch.pos, pushPos ), -1 );
-						
-						ch.pos = pushPos;
-						Dungeon.level.occupyCell(ch );
-						
-					} else {
-						spend(TICK);
-						return true;
-					}
-				}
-				
-				summoning = firstSummon = false;
-				
-				mySkeleton = new NecroSkeleton();
-				mySkeleton.pos = summoningPos;
-				GameScene.add( mySkeleton );
-				Dungeon.level.occupyCell( mySkeleton );
-				Sample.INSTANCE.play(Assets.Sounds.BONES);
-				summoningEmitter.burst( Speck.factory( Speck.RATTLE ), 5 );
-				sprite.idle();
-				
-				if (buff(Corruption.class) != null){
-					Buff.affect(mySkeleton, Corruption.class);
-				}
-				
-				spend(TICK);
+				summonMinion();
 				return true;
 			}
 			
@@ -260,7 +252,7 @@ public class Necromancer extends Mob {
 			}
 			
 			//if enemy is seen, and enemy is within range, and we haven no skeleton, summon a skeleton!
-			if (enemySeen && Dungeon.level.distance(pos,enemy.pos) <= 4 && mySkeleton == null){
+			if (enemySeen && Dungeon.level.distance(pos, enemy.pos) <= 4 && mySkeleton == null){
 				
 				summoningPos = -1;
 				for (int c : PathFinder.NEIGHBOURS8){
@@ -275,9 +267,6 @@ public class Necromancer extends Mob {
 				if (summoningPos != -1){
 					
 					summoning = true;
-					summoningEmitter = CellEmitter.get(summoningPos);
-					summoningEmitter.pour(Speck.factory(Speck.RATTLE), 0.2f);
-					
 					sprite.zap( summoningPos );
 					
 					spend( firstSummon ? TICK : 2*TICK );

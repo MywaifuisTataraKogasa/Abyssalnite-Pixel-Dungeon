@@ -26,7 +26,10 @@ import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Hero;
 import com.shatteredpixel.shatteredpixeldungeon.items.artifacts.Artifact;
 import com.shatteredpixel.shatteredpixeldungeon.items.artifacts.HornOfPlenty;
+import com.shatteredpixel.shatteredpixeldungeon.items.journal.Guidebook;
+import com.shatteredpixel.shatteredpixeldungeon.journal.Document;
 import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
+import com.shatteredpixel.shatteredpixeldungeon.scenes.GameScene;
 import com.shatteredpixel.shatteredpixeldungeon.ui.BuffIndicator;
 import com.shatteredpixel.shatteredpixeldungeon.utils.GLog;
 import com.watabou.utils.Bundle;
@@ -35,7 +38,7 @@ public class Hunger extends Buff implements Hero.Doom {
 
 	private static final float STEP	= 10f;
 
-	public static final float HUNGRY	= 250f;
+	public static final float HUNGRY	= 300f;
 	public static final float STARVING	= 450f;
 
 	private float level;
@@ -94,6 +97,11 @@ public class Hunger extends Buff implements Hero.Doom {
 
 					GLog.w( Messages.get(this, "onhungry") );
 
+					if (!Document.ADVENTURERS_GUIDE.isPageRead(Document.GUIDE_FOOD)){
+						GLog.p(Messages.get(Guidebook.class, "hint"));
+						GameScene.flashForDocument(Document.GUIDE_FOOD);
+					}
+
 				}
 				level = newLevel;
 
@@ -118,14 +126,23 @@ public class Hunger extends Buff implements Hero.Doom {
 			GLog.n( Messages.get(this, "cursedhorn") );
 		}
 
-		reduceHunger( energy );
+		affectHunger( energy, false );
 	}
 
-	//directly interacts with hunger, no checks.
-	public void reduceHunger( float energy ) {
+	public void affectHunger(float energy ){
+		affectHunger( energy, false );
+	}
+
+	public void affectHunger(float energy, boolean overrideLimits ) {
+
+		if (energy < 0 && target.buff(WellFed.class) != null){
+			target.buff(WellFed.class).left += energy;
+			BuffIndicator.refreshHero();
+			return;
+		}
 
 		level -= energy;
-		if (level < 0) {
+		if (level < 0 && !overrideLimits) {
 			level = 0;
 		} else if (level > STARVING) {
 			float excess = level - STARVING;

@@ -57,39 +57,46 @@ public class ScrollOfTeleportation extends Scroll {
 		Sample.INSTANCE.play( Assets.Sounds.READ );
 		
 		teleportPreferringUnseen( curUser );
-		setKnown();
+		identify();
 
-		readAnimation();
+		if (!Dungeon.bossLevel()) {
+			readAnimation();
+		}
 	}
 	
-	public static void teleportToLocation(Hero hero, int pos){
+	public static boolean teleportToLocation(Char ch, int pos){
 		PathFinder.buildDistanceMap(pos, BArray.or(Dungeon.level.passable, Dungeon.level.avoid, null));
-		if (PathFinder.distance[hero.pos] == Integer.MAX_VALUE
+		if (PathFinder.distance[ch.pos] == Integer.MAX_VALUE
 				|| (!Dungeon.level.passable[pos] && !Dungeon.level.avoid[pos])
 				|| Actor.findChar(pos) != null){
-			GLog.w( Messages.get(ScrollOfTeleportation.class, "cant_reach") );
-			return;
+			if (ch == Dungeon.hero){
+				GLog.w( Messages.get(ScrollOfTeleportation.class, "cant_reach") );
+			}
+			return false;
 		}
 		
-		appear( hero, pos );
-		Dungeon.level.occupyCell(hero );
-		Dungeon.observe();
-		GameScene.updateFog();
+		appear( ch, pos );
+		Dungeon.level.occupyCell( ch );
+		if (ch == Dungeon.hero) {
+			Dungeon.observe();
+			GameScene.updateFog();
+		}
+		return true;
 		
 	}
 	
-	public static void teleportHero( Hero hero ) {
-		teleportChar( hero );
+	public static boolean teleportHero( Hero hero ) {
+		return teleportChar( hero );
 	}
 	
-	public static void teleportChar( Char ch ) {
+	public static boolean teleportChar( Char ch ) {
 
 		if (Dungeon.bossLevel()){
 			GLog.w( Messages.get(ScrollOfTeleportation.class, "no_tele") );
-			return;
+			return false;
 		}
 		
-		int count = 10;
+		int count = 20;
 		int pos;
 		do {
 			pos = Dungeon.level.randomRespawnCell( ch );
@@ -101,6 +108,7 @@ public class ScrollOfTeleportation extends Scroll {
 		if (pos == -1) {
 			
 			GLog.w( Messages.get(ScrollOfTeleportation.class, "no_tele") );
+			return false;
 			
 		} else {
 			
@@ -112,7 +120,9 @@ public class ScrollOfTeleportation extends Scroll {
 				
 				Dungeon.observe();
 				GameScene.updateFog();
+				Dungeon.hero.interrupt();
 			}
+			return true;
 			
 		}
 	}

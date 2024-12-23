@@ -21,20 +21,10 @@
 
 package com.shatteredpixel.shatteredpixeldungeon.actors.mobs;
 
-import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
-import com.shatteredpixel.shatteredpixeldungeon.Statistics;
-import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.npcs.Ghost;
-import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.npcs.NPC;
-import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.npcs.RatKing;
-import com.shatteredpixel.shatteredpixeldungeon.levels.FinalLevel;
-import com.shatteredpixel.shatteredpixeldungeon.sprites.PillarSprite;
 import com.watabou.utils.Random;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
-
-import static com.shatteredpixel.shatteredpixeldungeon.levels.FinalLevel.finalphase;
 
 public class Bestiary {
 	
@@ -45,46 +35,6 @@ public class Bestiary {
 		Random.shuffle(mobs);
 		return mobs;
 	}
-
-
-	/**定义七塔组*/
-	public static ArrayList<Class<? extends Mob>> getTownMobRotation( int depth ){
-		ArrayList<Class<? extends Mob>> mobs = result;
-		GroundMobs(mobs);
-		WaterMobs(mobs);
-		FlameMobs(mobs);
-		WindMobs(mobs);
-		addHighMobs(depth, mobs);
-		Random.shuffle(mobs);
-		return mobs;
-	}
-
-	/**定义塔组怪物
-	 * 根据你的枚举生成怪物 You know?*/
-
-	static ArrayList<Class<? extends Mob>> result = new ArrayList<>();
-	//放外面保证都能加上
-	private static void GroundMobs(ArrayList<Class<? extends Mob>>result1) {
-		if (Statistics.FirstActive == true) {
-			result.add(GroundStatue.class);
-		}
-	}
-	private static void WaterMobs(ArrayList<Class<? extends Mob>>result2) {
-		if (Statistics.SecondActive == true) {
-			result.add(WaterFlower.class);
-		}
-	}
-	private static void FlameMobs(ArrayList<Class<? extends Mob>>result3) {
-		if (Statistics.ThirdActive == true) {
-			result.add(FlameDemon.class);
-		}
-	}
-	private static void WindMobs(ArrayList<Class<? extends Mob>>result4) {
-		if (Statistics.FourthActive == true) {
-			result.add(WindSwarm.class);
-		}
-	}
-
 	
 	//returns a rotation of standard mobs, unshuffled.
 	private static ArrayList<Class<? extends Mob>> standardMobRotation( int depth ){
@@ -98,12 +48,9 @@ public class Bestiary {
 						Snake.class));
 			case 2:
 				//2x rat, 1x snake, 2x gnoll
-				return new ArrayList<>(Arrays.asList(
-						Lavastone.class,GroundSpore.class,GroundSpore.class,Lavastone.class
-						//Rat.class, Rat.class,
-						//Snake.class,
-						//Gnoll.class, Gnoll.class
-				));
+				return new ArrayList<>(Arrays.asList(Rat.class, Rat.class,
+						Snake.class,
+						Gnoll.class, Gnoll.class));
 			case 3:
 				//1x rat, 1x snake, 3x gnoll, 1x swarm, 1x crab
 				return new ArrayList<>(Arrays.asList(Rat.class,
@@ -137,20 +84,14 @@ public class Bestiary {
 						DM100.class, DM100.class,
 						Guard.class, Guard.class,
 						Necromancer.class));
-			case 9:
+			case 9: case 10:
 				//1x skeleton, 1x thief, 2x DM-100, 2x guard, 2x necromancer
 				return new ArrayList<>(Arrays.asList(Skeleton.class,
 						Thief.class,
 						DM100.class, DM100.class,
 						Guard.class, Guard.class,
 						Necromancer.class, Necromancer.class));
-
-			case 10:
-				return new ArrayList<>(Arrays.asList(FakeWraith.class,
-							FakeWraith.class,FakeWraith.class,
-						FakeWraith.class,Skeleton.class));
-
-
+				
 			// Caves
 			case 11:
 				//3x bat, 1x brute, 1x shaman
@@ -187,23 +128,27 @@ public class Bestiary {
 				//2x ghoul, 2x elemental, 1x warlock
 				return new ArrayList<>(Arrays.asList(
 						Ghoul.class, Ghoul.class,
+						Elemental.random(), Elemental.random(),
 						Warlock.class));
 			case 17:
 				//1x ghoul, 2x elemental, 1x warlock, 1x monk
 				return new ArrayList<>(Arrays.asList(
 						Ghoul.class,
+						Elemental.random(), Elemental.random(),
 						Warlock.class,
 						Monk.class));
 			case 18:
 				//1x ghoul, 1x elemental, 2x warlock, 2x monk, 1x golem
 				return new ArrayList<>(Arrays.asList(
 						Ghoul.class,
+						Elemental.random(),
 						Warlock.class, Warlock.class,
 						Monk.class, Monk.class,
 						Golem.class));
 			case 19: case 20:
 				//1x elemental, 2x warlock, 2x monk, 3x golem
 				return new ArrayList<>(Arrays.asList(
+						Elemental.random(),
 						Warlock.class, Warlock.class,
 						Monk.class, Monk.class,
 						Golem.class, Golem.class, Golem.class));
@@ -231,28 +176,8 @@ public class Bestiary {
 						Succubus.class,
 						Eye.class, Eye.class,
 						Scorpio.class, Scorpio.class, Scorpio.class));
-			case 28:
-				if (finalphase == 1){
-					return new ArrayList<>(Arrays.asList(Gnoll.class,
-						Swarm.class,
-						Crab.class, Crab.class,
-						Slime.class, Slime.class));
-				}
-				else if (finalphase == 2) {
-					return new ArrayList<>(Arrays.asList(Gnoll.class,
-							Swarm.class,
-							Crab.class, Crab.class,
-							Slime.class, Slime.class));
-				}
-				else {
-					return new ArrayList<>(Arrays.asList(Gnoll.class,
-							Swarm.class,
-							Crab.class, Crab.class,
-							Slime.class, Slime.class));
-				}
-
 		}
-
+		
 	}
 	
 	//has a chance to add a rarely spawned mobs to the rotation
@@ -283,33 +208,11 @@ public class Bestiary {
 				return;
 		}
 	}
-
-	public static void addHighMobs( int depth, ArrayList<Class<?extends Mob>> rotation ){
-
-		switch (depth){
-
-			// Sewers
-			default:
-				return;
-			case 1:
-				//for debug
-				float spawn1 = Random.Float() ;
-				if (spawn1 < 0.031f) rotation.add(ChronosSkull.class);
-				if (0.031f <= spawn1 && spawn1 < 0.061f) rotation.add(HeavenDoor.class);
-				if (0.061f <= spawn1 && spawn1 < 0.091f) rotation.add(PhantomSpirit.class);
-			case 28:
-				float spawn = Random.Float() ;
-				if (spawn < 0.031f) rotation.add(ChronosSkull.class);
-				if (0.031f <= spawn && spawn < 0.061f) rotation.add(HeavenDoor.class);
-				if (0.061f <= spawn && spawn < 0.091f) rotation.add(PhantomSpirit.class);
-				return;
-		}
-	}
 	
 	//switches out regular mobs for their alt versions when appropriate
 	private static void swapMobAlts(ArrayList<Class<?extends Mob>> rotation){
 		for (int i = 0; i < rotation.size(); i++){
-			if (Random.Int( 50 ) == 0) {////
+			if (Random.Int( 50 ) == 0) {
 				Class<? extends Mob> cl = rotation.get(i);
 				if (cl == Rat.class) {
 					cl = Albino.class;
@@ -317,6 +220,8 @@ public class Bestiary {
 					cl = CausticSlime.class;
 				} else if (cl == Thief.class) {
 					cl = Bandit.class;
+				} else if (cl == Necromancer.class){
+					cl = SpectralNecromancer.class;
 				} else if (cl == Brute.class) {
 					cl = ArmoredBrute.class;
 				} else if (cl == DM200.class) {
