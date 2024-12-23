@@ -21,7 +21,6 @@
 
 package com.shatteredpixel.shatteredpixeldungeon.items.food;
 
-import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.AbyssalInfection;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Hunger;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.ItemSpriteSheet;
 
@@ -29,8 +28,7 @@ public class SmallRation extends Food {
 
 	{
 		image = ItemSpriteSheet.OVERPRICED;
-		energy = 100f;
-		clean = 250f;
+		energy = Hunger.HUNGRY/2f;
 	}
 	
 	@Override

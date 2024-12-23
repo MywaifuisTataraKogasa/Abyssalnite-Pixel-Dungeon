@@ -42,8 +42,11 @@ public class StoneOfDisarming extends Runestone {
 	
 	{
 		image = ItemSpriteSheet.STONE_DISARM;
+
+		//so traps do not activate before the effect
+		pressesCell = false;
 	}
-	
+
 	@Override
 	protected void activate(final int cell) {
 		boolean[] FOV = new boolean[Dungeon.level.length()];

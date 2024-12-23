@@ -25,17 +25,17 @@ import com.shatteredpixel.shatteredpixeldungeon.Assets;
 import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
 import com.shatteredpixel.shatteredpixeldungeon.SPDAction;
 import com.shatteredpixel.shatteredpixeldungeon.Statistics;
-import com.shatteredpixel.shatteredpixeldungeon.actors.Actor;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.AbyssalInfection;
-import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Hunger;
 import com.shatteredpixel.shatteredpixeldungeon.effects.Speck;
 import com.shatteredpixel.shatteredpixeldungeon.items.Item;
+import com.shatteredpixel.shatteredpixeldungeon.journal.Document;
 import com.shatteredpixel.shatteredpixeldungeon.scenes.GameScene;
 import com.shatteredpixel.shatteredpixeldungeon.scenes.PixelScene;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.HeroSprite;
 import com.shatteredpixel.shatteredpixeldungeon.windows.WndGame;
 import com.shatteredpixel.shatteredpixeldungeon.windows.WndHero;
 import com.shatteredpixel.shatteredpixeldungeon.windows.WndJournal;
+import com.shatteredpixel.shatteredpixeldungeon.windows.WndStory;
 import com.watabou.input.GameAction;
 import com.watabou.noosa.BitmapText;
 import com.watabou.noosa.Camera;
@@ -52,14 +52,20 @@ public class StatusPane extends Component {
 
 	private NinePatch bg;
 	private Image avatar;
+	public static float talentBlink;
 	private float warning;
+
+	private static final float FLASH_RATE = (float)(Math.PI*1.5f); //1.5 blinks per second
 
 	private int lastTier = 0;
 
 	private Image rawShielding;
 	private Image shieldedHP;
 	private Image hp;
+	private BitmapText hpText;
+
 	private Image infection;
+
 	private Image exp;
 
 	private BossHealthBar bossHP;
@@ -108,6 +114,8 @@ public class StatusPane extends Component {
 		avatar = HeroSprite.avatar( Dungeon.hero.heroClass, lastTier );
 		add( avatar );
 
+		talentBlink = 0;
+
 		compass = new Compass( Statistics.amuletObtained ? Dungeon.level.entrance : Dungeon.level.exit );
 		add( compass );
 
@@ -121,6 +129,10 @@ public class StatusPane extends Component {
 		hp = new Image( Assets.Interfaces.HP_BAR );
 		add( hp );
 
+		hpText = new BitmapText(PixelScene.pixelFont);
+		hpText.alpha(0.6f);
+		add(hpText);
+
 		infection = new Image( Assets.Interfaces.INFECTION_BAR );
 		add( infection );
 
@@ -131,7 +143,7 @@ public class StatusPane extends Component {
 		add( bossHP );
 
 		level = new BitmapText( PixelScene.pixelFont);
-		level.hardlight( 0xFFEBA4 );
+		level.hardlight( 0xFFFFAA );
 		add( level );
 
 		depth = new BitmapText( Integer.toString( Dungeon.depth ), PixelScene.pixelFont);
@@ -173,6 +185,12 @@ public class StatusPane extends Component {
 		infection.x = 30;
 		infection.y = 8;
 
+		hpText.scale.set(PixelScene.align(0.5f));
+		hpText.x = hp.x + 1;
+		hpText.y = hp.y + (hp.height - (hpText.baseLine()+hpText.scale.y))/2f;
+		hpText.y -= 0.001f; //prefer to be slightly higher
+		PixelScene.align(hpText);
+
 		bossHP.setPos( 6 + (width - bossHP.width())/2, 20);
 
 		depth.x = width - 35.5f - depth.width() / 2f;
@@ -200,21 +218,10 @@ public class StatusPane extends Component {
 	public void update() {
 		super.update();
 		
-		float health = Dungeon.hero.HP;
-		float shield = Dungeon.hero.shielding();
-		float max = Dungeon.hero.HT;
+		int health = Dungeon.hero.HP;
+		int shield = Dungeon.hero.shielding();
+		int max = Dungeon.hero.HT;
 		float maxinfection = (Float) AbyssalInfection.HARDINFECTION;
-
-
-		if (!Dungeon.hero.isAlive()) {
-			avatar.tint(0x000000, 0.5f);
-		} else if ((health/max) < 0.3f) {
-			warning += Game.elapsed * 5f *(0.4f - (health/max));
-			warning %= 1f;
-			avatar.tint(ColorMath.interpolate(warning, warningColors), 0.5f );
-		} else {
-			avatar.resetColor();
-		}
 
 		AbyssalInfection infectionbuff = Dungeon.hero.buff(AbyssalInfection.class);
 		if (infectionbuff != null){
@@ -224,9 +231,28 @@ public class StatusPane extends Component {
 			infection.scale.x = 0;
 		}
 
-		hp.scale.x = Math.max( 0, (health-shield)/max);
-		shieldedHP.scale.x = health/max;
-		rawShielding.scale.x = shield/max;
+		if (!Dungeon.hero.isAlive()) {
+			avatar.tint(0x000000, 0.5f);
+		} else if ((health/(float)max) < 0.3f) {
+			warning += Game.elapsed * 5f *(0.4f - (health/(float)max));
+			warning %= 1f;
+			avatar.tint(ColorMath.interpolate(warning, warningColors), 0.5f );
+		} else if (talentBlink > 0.33f){ //stops early so it doesn't end in the middle of a blink
+			talentBlink -= Game.elapsed;
+			avatar.tint(1, 1, 0, (float)Math.abs(Math.cos(talentBlink*FLASH_RATE))/2f);
+		} else {
+			avatar.resetColor();
+		}
+
+		hp.scale.x = Math.max( 0, (health-shield)/(float)max);
+		shieldedHP.scale.x = health/(float)max;
+		rawShielding.scale.x = shield/(float)max;
+
+		if (shield <= 0){
+			hpText.text(health + "/" + max);
+		} else {
+			hpText.text(health + "+" + shield +  "/" + max);
+		}
 
 		exp.scale.x = (width / exp.width) * Dungeon.hero.exp / Dungeon.hero.maxExp();
 
@@ -260,9 +286,9 @@ public class StatusPane extends Component {
 			btnJournal.journalIcon.x + btnJournal.journalIcon.width()/2f,
 			btnJournal.journalIcon.y + btnJournal.journalIcon.height()/2f);
 	}
-	
-	public void flash(){
-		btnJournal.flashing = true;
+
+	public void flashForPage( String page ){
+		btnJournal.flashingPage = page;
 	}
 	
 	public void updateKeys(){
@@ -275,7 +301,7 @@ public class StatusPane extends Component {
 		private Image journalIcon;
 		private KeyDisplay keyIcon;
 		
-		private boolean flashing;
+		private String flashingPage = null;
 
 		public JournalButton() {
 			super();
@@ -328,10 +354,10 @@ public class StatusPane extends Component {
 		public void update() {
 			super.update();
 			
-			if (flashing){
-				journalIcon.am = (float)Math.abs(Math.cos( 3 * (time += Game.elapsed) ));
+			if (flashingPage != null){
+				journalIcon.am = (float)Math.abs(Math.cos( FLASH_RATE * (time += Game.elapsed) ));
 				keyIcon.am = journalIcon.am;
-				if (time >= 0.333f*Math.PI) {
+				if (time >= Math.PI/FLASH_RATE) {
 					time = 0;
 				}
 			}
@@ -365,10 +391,21 @@ public class StatusPane extends Component {
 
 		@Override
 		protected void onClick() {
-			flashing = false;
 			time = 0;
 			keyIcon.am = journalIcon.am = 1;
-			GameScene.show( new WndJournal() );
+			if (flashingPage != null){
+				if (Document.ADVENTURERS_GUIDE.pageNames().contains(flashingPage)){
+					GameScene.show( new WndStory( WndJournal.GuideTab.iconForPage(flashingPage),
+							Document.ADVENTURERS_GUIDE.pageTitle(flashingPage),
+							Document.ADVENTURERS_GUIDE.pageBody(flashingPage) ));
+					Document.ADVENTURERS_GUIDE.readPage(flashingPage);
+				} else {
+					GameScene.show( new WndJournal() );
+				}
+				flashingPage = null;
+			} else {
+				GameScene.show( new WndJournal() );
+			}
 		}
 
 	}

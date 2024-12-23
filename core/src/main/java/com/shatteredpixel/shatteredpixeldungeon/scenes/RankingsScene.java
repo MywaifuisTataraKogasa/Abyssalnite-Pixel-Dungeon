@@ -58,7 +58,7 @@ public class RankingsScene extends PixelScene {
 	public void create() {
 		
 		super.create();
-		
+
 		Music.INSTANCE.play( Assets.Music.THEME, true );
 
 		uiCamera.visible = false;

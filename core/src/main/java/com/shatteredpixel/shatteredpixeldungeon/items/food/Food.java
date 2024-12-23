@@ -43,40 +43,41 @@ import java.util.ArrayList;
 public class Food extends Item {
 
 	public static final float TIME_TO_EAT	= 3f;
-	
+
 	public static final String AC_EAT	= "EAT";
-	
+
 	public float energy = 300f;
 	public float clean = 35f;
 	public String message = Messages.get(this, "eat_msg");
-	
+
 	{
 		stackable = true;
 		image = ItemSpriteSheet.RATION;
 
 		bones = true;
+		defaultAction = AC_EAT;
 	}
-	
+
 	@Override
 	public ArrayList<String> actions( Hero hero ) {
 		ArrayList<String> actions = super.actions( hero );
 		actions.add( AC_EAT );
 		return actions;
 	}
-	
+
 	@Override
 	public void execute( Hero hero, String action ) {
 
 		super.execute( hero, action );
 
 		if (action.equals( AC_EAT )) {
-			
+
 			detach( hero.belongings.backpack );
-			
+
 			satisfy(hero);
 			cureinfc(hero);
 			GLog.i( message );
-			
+
 			foodProc( hero );
 
 			hero.sprite.operate( hero.pos );
@@ -117,17 +118,17 @@ public class Food extends Item {
 				break;
 		}
 	}
-	
+
 	@Override
 	public boolean isUpgradable() {
 		return false;
 	}
-	
+
 	@Override
 	public boolean isIdentified() {
 		return true;
 	}
-	
+
 	@Override
 	public int value() {
 		return 10 * quantity;

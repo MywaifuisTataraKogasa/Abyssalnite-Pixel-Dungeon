@@ -49,10 +49,11 @@ public class Frost extends FlavourBuff {
 	
 	@Override
 	public boolean attachTo( Char target ) {
+		Buff.detach( target, Burning.class );
+
 		if (super.attachTo( target )) {
 			
 			target.paralysed++;
-			Buff.detach( target, Burning.class );
 			Buff.detach( target, Chill.class );
 
 			if (target instanceof Hero) {
@@ -60,9 +61,11 @@ public class Frost extends FlavourBuff {
 				Hero hero = (Hero)target;
 				ArrayList<Item> freezable = new ArrayList<>();
 				//does not reach inside of containers
-				for (Item i : hero.belongings.backpack.items){
-					if (!i.unique && (i instanceof Potion || i instanceof MysteryMeat)){
-						freezable.add(i);
+				if (hero.buff(LostInventory.class) != null) {
+					for (Item i : hero.belongings.backpack.items) {
+						if (!i.unique && (i instanceof Potion || i instanceof MysteryMeat)) {
+							freezable.add(i);
+						}
 					}
 				}
 				
@@ -124,8 +127,13 @@ public class Frost extends FlavourBuff {
 
 	@Override
 	public void fx(boolean on) {
-		if (on) target.sprite.add(CharSprite.State.FROZEN);
-		else target.sprite.remove(CharSprite.State.FROZEN);
+		if (on) {
+			target.sprite.add(CharSprite.State.FROZEN);
+			target.sprite.add(CharSprite.State.PARALYSED);
+		} else {
+			target.sprite.remove(CharSprite.State.FROZEN);
+			if (target.paralysed <= 1) target.sprite.remove(CharSprite.State.PARALYSED);
+		}
 	}
 
 	@Override
@@ -136,6 +144,11 @@ public class Frost extends FlavourBuff {
 	@Override
 	public String desc() {
 		return Messages.get(this, "desc", dispTurns());
+	}
+
+	{
+		//can't chill what's frozen!
+		immunities.add( Chill.class );
 	}
 
 }

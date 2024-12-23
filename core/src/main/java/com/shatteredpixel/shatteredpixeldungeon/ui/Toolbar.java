@@ -32,12 +32,13 @@ import com.shatteredpixel.shatteredpixeldungeon.scenes.GameScene;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.ItemSprite;
 import com.shatteredpixel.shatteredpixeldungeon.tiles.DungeonTerrainTilemap;
 import com.shatteredpixel.shatteredpixeldungeon.windows.WndBag;
-import com.shatteredpixel.shatteredpixeldungeon.windows.WndJournal;
+import com.shatteredpixel.shatteredpixeldungeon.windows.WndQuickBag;
 import com.watabou.input.GameAction;
 import com.watabou.noosa.Camera;
 import com.watabou.noosa.Game;
 import com.watabou.noosa.Gizmo;
 import com.watabou.noosa.Image;
+import com.watabou.noosa.PointerArea;
 import com.watabou.noosa.ui.Button;
 import com.watabou.noosa.ui.Component;
 import com.watabou.utils.Point;
@@ -142,7 +143,7 @@ public class Toolbar extends Component {
 
 			@Override
 			protected void onClick() {
-				GameScene.show(new WndBag(Dungeon.hero.belongings.backpack, null, WndBag.Mode.ALL, null));
+				GameScene.show(new WndBag(Dungeon.hero.belongings.backpack));
 			}
 			
 			@Override
@@ -152,8 +153,7 @@ public class Toolbar extends Component {
 			
 			@Override
 			protected boolean onLongClick() {
-				WndJournal.last_index = 3; //catalog page
-				GameScene.show(new WndJournal());
+				GameScene.show(new WndQuickBag(null));
 				return true;
 			}
 
@@ -269,7 +269,7 @@ public class Toolbar extends Component {
 		if (lastEnabled != (Dungeon.hero.ready && Dungeon.hero.isAlive())) {
 			lastEnabled = (Dungeon.hero.ready && Dungeon.hero.isAlive());
 			
-			for (Gizmo tool : members) {
+			for (Gizmo tool : members.toArray(new Gizmo[0])) {
 				if (tool instanceof Tool) {
 					((Tool)tool).enable( lastEnabled );
 				}
@@ -309,7 +309,7 @@ public class Toolbar extends Component {
 		public Tool( int x, int y, int width, int height ) {
 			super();
 
-			hotArea.blockWhenInactive = true;
+			hotArea.blockLevel = PointerArea.ALWAYS_BLOCK;
 			frame(x, y, width, height);
 		}
 

@@ -38,7 +38,6 @@ import com.shatteredpixel.shatteredpixeldungeon.utils.GLog;
 import com.watabou.noosa.audio.Sample;
 import com.watabou.utils.Random;
 
-//TODO stats on these might be a bit weak
 public abstract class Shaman extends Mob {
 	
 	{
@@ -112,9 +111,9 @@ public abstract class Shaman extends Mob {
 		
 		if (hit( this, enemy, true )) {
 			
-			if (enemy == Dungeon.hero && Random.Int( 2 ) == 0) {
+			if (Random.Int( 2 ) == 0) {
 				debuff( enemy );
-				Sample.INSTANCE.play( Assets.Sounds.DEBUFF );
+				if (enemy == Dungeon.hero) Sample.INSTANCE.play( Assets.Sounds.DEBUFF );
 			}
 			
 			int dmg = Random.NormalIntRange( 6, 15 );
@@ -173,8 +172,6 @@ public abstract class Shaman extends Mob {
 			Buff.prolong( enemy, Hex.class, Hex.DURATION );
 		}
 	}
-	
-	//TODO a rare variant that helps brutes?
 	
 	public static Class<? extends Shaman> random(){
 		float roll = Random.Float();

@@ -24,9 +24,6 @@ package com.shatteredpixel.shatteredpixeldungeon.actors.mobs;
 import com.shatteredpixel.shatteredpixeldungeon.Assets;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Buff;
-import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Burning;
-import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.DreadPlague;
-import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Terror;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.npcs.Imp;
 import com.shatteredpixel.shatteredpixeldungeon.items.food.Food;
 import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
@@ -51,7 +48,7 @@ public class Monk extends Mob {
 		loot = new Food();
 		lootChance = 0.083f;
 
-		properties.add(Property.DEMONIC);
+		properties.add(Property.UNDEAD);
 	}
 	
 	@Override
@@ -65,7 +62,7 @@ public class Monk extends Mob {
 	}
 	
 	@Override
-	protected float attackDelay() {
+	public float attackDelay() {
 		return super.attackDelay()*0.5f;
 	}
 	
@@ -80,13 +77,7 @@ public class Monk extends Mob {
 		
 		super.rollToDropLoot();
 	}
-
-	{
-		immunities.add( Burning.class );
-		immunities.add( Terror.class );
-		immunities.add( DreadPlague.class );
-	}
-
+	
 	protected float focusCooldown = 0;
 	
 	@Override
@@ -99,7 +90,7 @@ public class Monk extends Mob {
 	}
 	
 	@Override
-	public void spend(float time) {
+	protected void spend( float time ) {
 		focusCooldown -= time;
 		super.spend( time );
 	}
@@ -111,18 +102,7 @@ public class Monk extends Mob {
 		focusCooldown -= 0.67f;
 		super.move( step );
 	}
-
-	@Override
-	public int attackProc( Char enemy, int damage ) {
-		damage = super.attackProc( enemy, damage );
-
-		if (Random.Int( 5 ) == 0) {
-			Buff.affect( enemy, DreadPlague.class ).set( DreadPlague.DURATION );
-		}
-
-		return damage;
-	}
-
+	
 	@Override
 	public int defenseSkill( Char enemy ) {
 		if (buff(Focus.class) != null && paralysed == 0 && state != SLEEPING){
@@ -138,7 +118,9 @@ public class Monk extends Mob {
 			return super.defenseVerb();
 		} else {
 			f.detach();
-			Sample.INSTANCE.play( Assets.Sounds.HIT_PARRY, 1, Random.Float(0.96f, 1.05f));
+			if (sprite != null && sprite.visible) {
+				Sample.INSTANCE.play(Assets.Sounds.HIT_PARRY, 1, Random.Float(0.96f, 1.05f));
+			}
 			focusCooldown = Random.NormalFloat( 6, 7 );
 			return Messages.get(this, "parried");
 		}

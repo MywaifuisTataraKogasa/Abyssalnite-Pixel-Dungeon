@@ -21,17 +21,13 @@
 
 package com.shatteredpixel.shatteredpixeldungeon.actors.mobs;
 
-import com.shatteredpixel.shatteredpixeldungeon.Assets;
 import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
 import com.shatteredpixel.shatteredpixeldungeon.actors.blobs.Blob;
 import com.shatteredpixel.shatteredpixeldungeon.actors.blobs.CorrosiveGas;
 import com.shatteredpixel.shatteredpixeldungeon.items.quest.MetalShard;
-import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
 import com.shatteredpixel.shatteredpixeldungeon.scenes.GameScene;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.DM201Sprite;
-import com.shatteredpixel.shatteredpixeldungeon.utils.GLog;
-import com.watabou.noosa.audio.Sample;
 import com.watabou.utils.PathFinder;
 import com.watabou.utils.Random;
 
@@ -63,8 +59,7 @@ public class DM201 extends DM200 {
 			Dungeon.level.updateFieldOfView( this, fieldOfView );
 		}
 
-		GameScene.add(Blob.seed(pos, 0, CorrosiveGas.class));
-		if (state == HUNTING && enemy != null && enemySeen
+		if (paralysed <= 0 && state == HUNTING && enemy != null && enemySeen
 				&& threatened && !Dungeon.level.adjacent(pos, enemy.pos) && fieldOfView[enemy.pos]){
 			enemySeen = enemy.isAlive() && fieldOfView[enemy.pos] && enemy.invisible <= 0;
 			if (sprite != null && (sprite.visible || enemy.sprite.visible)) {
@@ -96,14 +91,12 @@ public class DM201 extends DM200 {
 		threatened = false;
 		spend(TICK);
 
-		GLog.w(Messages.get(this, "vent"));
 		GameScene.add(Blob.seed(enemy.pos, 15, CorrosiveGas.class).setStrength(8));
 		for (int i : PathFinder.NEIGHBOURS8){
 			if (!Dungeon.level.solid[enemy.pos+i]) {
 				GameScene.add(Blob.seed(enemy.pos + i, 5, CorrosiveGas.class).setStrength(8));
 			}
 		}
-		Sample.INSTANCE.play(Assets.Sounds.GAS);
 
 	}
 
@@ -126,7 +119,7 @@ public class DM201 extends DM200 {
 		int ofs;
 		do {
 			ofs = PathFinder.NEIGHBOURS8[Random.Int(8)];
-		} while (Dungeon.level.solid[pos + ofs]);
+		} while (Dungeon.level.solid[pos + ofs] && !Dungeon.level.passable[pos + ofs]);
 		Dungeon.level.drop( new MetalShard(), pos + ofs ).sprite.drop( pos );
 	}
 

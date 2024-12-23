@@ -68,7 +68,7 @@ public class ShockBomb extends Bomb {
 
 		ArrayList<Lightning.Arc> arcs = new ArrayList<>();
 		for (Char ch : affected){
-			int power = 16 - 4*Dungeon.level.distance(ch.pos,cell);
+			int power = 16 - 4*Dungeon.level.distance(ch.pos, cell);
 			if (power > 0){
 				//32% to 8% regular bomb damage
 				int damage = Math.round(Random.NormalIntRange(5 + Dungeon.depth, 10 + 2*Dungeon.depth) * (power/50f));

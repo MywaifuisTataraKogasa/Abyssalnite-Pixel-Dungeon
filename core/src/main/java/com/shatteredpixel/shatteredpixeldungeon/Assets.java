@@ -21,8 +21,6 @@
 
 package com.shatteredpixel.shatteredpixeldungeon;
 
-import com.watabou.noosa.Image;
-
 public class Assets {
 
 	public static class Effects {
@@ -53,8 +51,7 @@ public class Assets {
 		public static final String WEAK_FLOOR       = "environment/custom_tiles/weak_floor.png";
 		public static final String SEWER_BOSS       = "environment/custom_tiles/sewer_boss.png";
 		public static final String PRISON_QUEST     = "environment/custom_tiles/prison_quests.png";
-		public static final String PRISON_EXIT_OLD  = "environment/custom_tiles/prison_exit_old.png";
-		public static final String PRISON_EXIT_NEW  = "environment/custom_tiles/prison_exit_new.png";
+		public static final String PRISON_EXIT      = "environment/custom_tiles/prison_exit.png";
 		public static final String CAVES_BOSS       = "environment/custom_tiles/caves_boss.png";
 		public static final String CITY_BOSS        = "environment/custom_tiles/city_boss.png";
 		public static final String HALLS_SP         = "environment/custom_tiles/halls_special.png";
@@ -94,9 +91,14 @@ public class Assets {
 
 		public static final String BUFFS_SMALL	= "interfaces/buffs.png";
 		public static final String BUFFS_LARGE	= "interfaces/large_buffs.png";
-		public static final String CONS_ICONS   = "interfaces/consumable_icons.png";
-        public static final String INFECTION_BAR = "interfaces/infection_bar.png";
-    }
+
+		public static final String TALENT_ICONS	 = "interfaces/talent_icons.png";
+		public static final String TALENT_BUTTON = "interfaces/talent_button.png";
+
+		public static final String HERO_ICONS	= "interfaces/hero_icons.png";
+
+		public static final String INFECTION_BAR = "interfaces/infection_bar.png";
+	}
 
 	//these points to resource bundles, not raw asset files
 	public static class Messages {
@@ -112,9 +114,13 @@ public class Assets {
 	}
 
 	public static class Music {
-		public static final String GAME		= "music/game.ogg";
-		public static final String SURFACE	= "music/surface.ogg";
-		public static final String THEME	= "music/theme.ogg";
+		public static final String THEME  	= "music/theme.ogg";
+		public static final String THEME_2	    = "music/theme_2.ogg";
+
+		public static final String SEWERS_1		= "music/sewers_1.ogg";
+		public static final String SEWERS_2		= "music/sewers_2.ogg";
+
+		//TODO 坠渊音乐
 		public static final String TEMPLE	= "music/bgm1.ogg";
 		public static final String UNDER	= "music/bgm2.ogg";
 		public static final String MINE	    = "music/bgm3.ogg";
@@ -213,7 +219,7 @@ public class Assets {
 				DESCEND, EAT, READ, LULLABY, DRINK, SHATTER, ZAP, LIGHTNING, LEVELUP, DEATH,
 				CHALLENGE, CURSED, TRAP, EVOKE, TOMB, ALERT, MELD, BOSS, BLAST, PLANT, RAY, BEACON,
 				TELEPORT, CHARMS, MASTERY, PUFF, ROCKS, BURNING, FALLING, GHOST, SECRET, BONES,
-				BEE, DEGRADE, MIMIC, DEBUFF, CHARGEUP, GAS, CHAINS, SCAN, SHEEP, PUDDING, CURE,
+				BEE, DEGRADE, MIMIC, DEBUFF, CHARGEUP, GAS, CHAINS, SCAN, SHEEP, PUDDING, CURE
 		};
 	}
 
@@ -288,6 +294,9 @@ public class Assets {
 		public static final String PYLON	= "sprites/pylon.png";
 		public static final String DM200	= "sprites/dm200.png";
 		public static final String LOTUS	= "sprites/lotus.png";
+		public static final String NINJA_LOG= "sprites/ninja_log.png";
+		public static final String SPIRIT_HAWK= "sprites/spirit_hawk.png";
+
 		public static final String CODEE	= "sprites/codee.png";
 		public static final String PILLAR	= "sprites/pillar.png";
 	}

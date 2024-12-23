@@ -23,7 +23,6 @@ package com.shatteredpixel.shatteredpixeldungeon.levels.rooms.connection;
 
 import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
 import com.shatteredpixel.shatteredpixeldungeon.levels.rooms.Room;
-import com.watabou.utils.Point;
 import com.watabou.utils.Random;
 import com.watabou.utils.Reflection;
 
@@ -43,12 +42,6 @@ public abstract class ConnectionRoom extends Room {
 	public int minConnections(int direction) {
 		if (direction == ALL)   return 2;
 		else                    return 0;
-	}
-	
-	@Override
-	public boolean canPlaceTrap(Point p) {
-		//traps cannot appear in connection rooms on floor 1
-		return super.canPlaceTrap(p) && Dungeon.depth > 1;
 	}
 	
 	//FIXME this is a very messy way of handing variable connection rooms

@@ -83,7 +83,7 @@ public class NewsScene extends PixelScene {
 		align(title);
 		add(title);
 
-		float top = 20;
+		float top = 18;
 
 		displayingNoArticles = !News.articlesAvailable();
 		if (displayingNoArticles || Messages.lang() != Languages.ENGLISH) {
@@ -106,7 +106,7 @@ public class NewsScene extends PixelScene {
 			}
 			rows++;
 
-			while ((articleSpace) / (BTN_HEIGHT+1) < rows) {
+			while ((articleSpace) / (BTN_HEIGHT+0.5f) < rows) {
 				articles.remove(articles.size() - 1);
 				if (PixelScene.landscape()) {
 					articles.remove(articles.size() - 1);
@@ -119,6 +119,7 @@ public class NewsScene extends PixelScene {
 			boolean rightCol = false;
 			for (NewsArticle article : articles) {
 				StyledButton b = new ArticleButton(article);
+				b.multiline = true;
 				if (!rightCol) {
 					top += gap;
 					b.setRect( left, top, BTN_WIDTH, BTN_HEIGHT);
@@ -237,18 +238,20 @@ public class NewsScene extends PixelScene {
 			bg.y = y;
 
 			text.maxWidth((int)width - bg.marginHor());
-			text.setPos(x + bg.marginLeft(), y + bg.marginTop());
+			text.setPos(x + bg.marginLeft(), y + bg.marginTop()+1);
 
 			height = (text.bottom()) - y;
 
 			if (button != null){
 				height += 4;
-				button.setSize(button.reqWidth()+2, 16);
+				button.multiline = true;
+				button.setSize(width - bg.marginHor(), 16);
+				button.setSize(width - bg.marginHor(), Math.max(button.reqHeight(), 16));
 				button.setPos(x + (width - button.width())/2, y + height);
 				height = button.bottom() - y;
 			}
 
-			height += bg.marginBottom();
+			height += bg.marginBottom() + 1;
 
 			bg.size(width, height);
 
@@ -282,8 +285,6 @@ public class NewsScene extends PixelScene {
 
 		@Override
 		protected void layout() {
-			text.maxWidth( (int)(width - icon.width() - bg.marginHor() - 2));
-
 			super.layout();
 
 			icon.x = x + bg.marginLeft() + (16-icon.width())/2f;
@@ -291,8 +292,8 @@ public class NewsScene extends PixelScene {
 			text.setPos(x + bg.marginLeft() + 18, text.top());
 
 			if (date != null) {
-				date.x = x + width - bg.marginRight() - date.width() + 2;
-				date.y = y + height - bg.marginBottom() - date.height() + 3.5f;
+				date.x = x + width - bg.marginRight() - date.width() + 1;
+				date.y = y + height - bg.marginBottom() - date.height() + 2.5f;
 				align(date);
 			}
 		}

@@ -66,10 +66,11 @@ public class PotionOfDragonsBreath extends ExoticPotion {
 		public void onSelect(final Integer cell) {
 
 			if (cell == null && !isKnown()){
-				setKnown();
+				identify();
 				detach(curUser.belongings.backpack);
 			} else if (cell != null) {
-				setKnown();
+				identify();
+				curUser.busy();
 				Sample.INSTANCE.play( Assets.Sounds.DRINK );
 				curUser.sprite.operate(curUser.pos, new Callback() {
 					@Override
@@ -77,20 +78,19 @@ public class PotionOfDragonsBreath extends ExoticPotion {
 
 						curItem.detach(curUser.belongings.backpack);
 
-						curUser.spend(1f);
 						curUser.sprite.idle();
 						curUser.sprite.zap(cell);
 						Sample.INSTANCE.play( Assets.Sounds.BURNING );
 
-						final Ballistica bolt = new Ballistica(curUser.pos, cell, Ballistica.STOP_TERRAIN | Ballistica.IGNORE_DOORS);
+						final Ballistica bolt = new Ballistica(curUser.pos, cell, Ballistica.WONT_STOP);
 
 						int maxDist = 6;
 						int dist = Math.min(bolt.dist, maxDist);
 
-						final ConeAOE cone = new ConeAOE(bolt, 6, 60, Ballistica.STOP_TERRAIN | Ballistica.STOP_TARGET | Ballistica.IGNORE_DOORS );
+						final ConeAOE cone = new ConeAOE(bolt, 6, 60, Ballistica.STOP_SOLID | Ballistica.STOP_TARGET | Ballistica.IGNORE_SOFT_SOLID);
 
 						//cast to cells at the tip, rather than all cells, better performance.
-						for (Ballistica ray : cone.rays){
+						for (Ballistica ray : cone.outerRays){
 							((MagicMissile)curUser.sprite.parent.recycle( MagicMissile.class )).reset(
 									MagicMissile.FIRE_CONE,
 									curUser.sprite,
@@ -146,7 +146,7 @@ public class PotionOfDragonsBreath extends ExoticPotion {
 											}
 										}
 
-										curUser.next();
+										curUser.spendAndNext(1f);
 									}
 								});
 						

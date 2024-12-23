@@ -21,7 +21,6 @@
 
 package com.shatteredpixel.shatteredpixeldungeon.items.food;
 
-import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.AbyssalInfection;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Hunger;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.ItemSpriteSheet;
 
@@ -29,8 +28,7 @@ public class ChargrilledMeat extends Food {
 
 	{
 		image = ItemSpriteSheet.STEAK;
-		energy = 120f;
-		clean =80f;
+		energy = Hunger.HUNGRY/2f;
 	}
 	
 	@Override
@@ -38,9 +36,9 @@ public class ChargrilledMeat extends Food {
 		return 8 * quantity;
 	}
 	
-	public static Food cook( MysteryMeat ingredient ) {
+	public static Food cook( int quantity ) {
 		ChargrilledMeat result = new ChargrilledMeat();
-		result.quantity = ingredient.quantity();
+		result.quantity = quantity;
 		return result;
 	}
 }

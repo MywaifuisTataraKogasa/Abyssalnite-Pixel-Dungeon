@@ -24,9 +24,7 @@ package com.shatteredpixel.shatteredpixeldungeon.actors.mobs;
 import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
 import com.shatteredpixel.shatteredpixeldungeon.Statistics;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Actor;
-import com.shatteredpixel.shatteredpixeldungeon.actors.blobs.ToxicGas;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Amok;
-import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Burning;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Paralysis;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Sleep;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Terror;
@@ -51,7 +49,7 @@ public class DemonSpawner extends Mob {
 		HP = HT = 120;
 		defenseSkill = 0;
 
-		EXP = 25;
+		EXP = 15;
 		maxLvl = 29;
 
 		state = PASSIVE;
@@ -161,8 +159,6 @@ public class DemonSpawner extends Mob {
 
 	{
 		immunities.add( Paralysis.class );
-		immunities.add( Burning.class );
-		immunities.add( ToxicGas.class );
 		immunities.add( Amok.class );
 		immunities.add( Sleep.class );
 		immunities.add( Terror.class );

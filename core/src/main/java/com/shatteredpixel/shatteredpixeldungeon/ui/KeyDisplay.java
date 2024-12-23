@@ -98,8 +98,7 @@ public class KeyDisplay extends Visual {
 		if (dirty){
 			
 			updateVertices();
-			
-			quads.limit(quads.position());
+
 			((Buffer)quads).limit(quads.position());
 			if (buffer == null)
 				buffer = new Vertexbuffer(quads);
@@ -213,6 +212,13 @@ public class KeyDisplay extends Visual {
 		
 		dirty = false;
 		
+	}
+
+	@Override
+	public void destroy() {
+		super.destroy();
+		if (buffer != null)
+			buffer.delete();
 	}
 	
 }

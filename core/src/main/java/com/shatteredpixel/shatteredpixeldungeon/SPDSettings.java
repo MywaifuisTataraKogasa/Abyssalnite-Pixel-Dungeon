@@ -162,7 +162,7 @@ public class SPDSettings extends GameSettings {
 	public static final String KEY_INTRO		= "intro";
 
 	public static final String KEY_SUPPORT_NAGGED= "support_nagged";
-
+	
 	public static void intro( boolean value ) {
 		put( KEY_INTRO, value );
 	}
@@ -194,7 +194,7 @@ public class SPDSettings extends GameSettings {
 	public static boolean supportNagged() {
 		return getBoolean(KEY_SUPPORT_NAGGED, false);
 	}
-
+	
 	//Audio
 	
 	public static final String KEY_MUSIC		= "music";
@@ -269,6 +269,7 @@ public class SPDSettings extends GameSettings {
 
 	public static final String KEY_NEWS     = "news";
 	public static final String KEY_UPDATES	= "updates";
+	public static final String KEY_BETAS	= "betas";
 	public static final String KEY_WIFI     = "wifi";
 
 	public static final String KEY_NEWS_LAST_READ = "news_last_read";
@@ -287,6 +288,14 @@ public class SPDSettings extends GameSettings {
 
 	public static boolean updates(){
 		return getBoolean(KEY_UPDATES, true);
+	}
+
+	public static void betas(boolean value){
+		put(KEY_BETAS, value);
+	}
+
+	public static boolean betas(){
+		return getBoolean(KEY_BETAS, Game.version.contains("BETA") || Game.version.contains("RC"));
 	}
 
 	public static void WiFi(boolean value){

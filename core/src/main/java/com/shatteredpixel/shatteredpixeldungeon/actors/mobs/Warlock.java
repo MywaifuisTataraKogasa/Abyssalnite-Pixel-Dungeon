@@ -25,10 +25,7 @@ import com.shatteredpixel.shatteredpixeldungeon.Assets;
 import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Buff;
-import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Burning;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Degrade;
-import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.DreadPlague;
-import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Terror;
 import com.shatteredpixel.shatteredpixeldungeon.items.Generator;
 import com.shatteredpixel.shatteredpixeldungeon.items.Item;
 import com.shatteredpixel.shatteredpixeldungeon.items.potions.PotionOfHealing;
@@ -57,21 +54,9 @@ public class Warlock extends Mob implements Callback {
 		loot = Generator.Category.POTION;
 		lootChance = 0.5f;
 
-		properties.add(Property.DEMONIC);
-
+		properties.add(Property.UNDEAD);
 	}
-
-	@Override
-	public int attackProc( Char enemy, int damage ) {
-		damage = super.attackProc( enemy, damage );
-
-		if (Random.Int( 9 ) == 0) {
-			Buff.affect( enemy, DreadPlague.class ).set( DreadPlague.DURATION );
-		}
-
-		return damage;
-	}
-
+	
 	@Override
 	public int damageRoll() {
 		return Random.NormalIntRange( 12, 18 );
@@ -91,13 +76,7 @@ public class Warlock extends Mob implements Callback {
 	protected boolean canAttack( Char enemy ) {
 		return new Ballistica( pos, enemy.pos, Ballistica.MAGIC_BOLT).collisionPos == enemy.pos;
 	}
-
-	{
-		immunities.add( Burning.class );
-		immunities.add( Terror.class );
-		immunities.add( DreadPlague.class );
-	}
-
+	
 	protected boolean doAttack( Char enemy ) {
 
 		if (Dungeon.level.adjacent( pos, enemy.pos )) {
@@ -115,8 +94,7 @@ public class Warlock extends Mob implements Callback {
 			}
 		}
 	}
-
-
+	
 	//used so resistances can differentiate between melee and magical attacks
 	public static class DarkBolt{}
 	
@@ -157,7 +135,7 @@ public class Warlock extends Mob implements Callback {
 
 		// 1/6 chance for healing, scaling to 0 over 8 drops
 		if (Random.Int(2) == 0 && Random.Int(8) > Dungeon.LimitedDrops.WARLOCK_HP.count ){
-			Dungeon.LimitedDrops.WARLOCK_HP.drop();
+			Dungeon.LimitedDrops.WARLOCK_HP.count++;
 			return new PotionOfHealing();
 		} else {
 			Item i = Generator.random(Generator.Category.POTION);

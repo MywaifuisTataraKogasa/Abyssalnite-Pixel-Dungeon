@@ -21,7 +21,6 @@
 
 package com.shatteredpixel.shatteredpixeldungeon.items.food;
 
-import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.AbyssalInfection;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Buff;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Hunger;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Recharging;
@@ -74,8 +73,7 @@ public class Pasty extends Food {
 	{
 		reset();
 
-		energy = 300f;
-		clean = 120f;
+		energy = Hunger.STARVING;
 
 		bones = true;
 	}

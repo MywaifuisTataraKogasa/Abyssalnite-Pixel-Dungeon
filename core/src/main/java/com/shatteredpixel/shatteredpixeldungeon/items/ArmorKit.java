@@ -65,7 +65,7 @@ public class ArmorKit extends Item {
 		if (action.equals(AC_APPLY)) {
 
 			curUser = hero;
-			GameScene.selectItem( itemSelector, WndBag.Mode.ARMOR, Messages.get(this, "prompt") );
+			GameScene.selectItem( itemSelector );
 			
 		}
 	}
@@ -83,8 +83,9 @@ public class ArmorKit extends Item {
 	private void upgrade( Armor armor ) {
 		
 		detach( curUser.belongings.backpack );
-		
-		curUser.sprite.centerEmitter().start( Speck.factory( Speck.KIT ), 0.05f, 10 );
+
+		//TODO 原效果KIT
+		curUser.sprite.centerEmitter().start( Speck.factory( Speck.STAR ), 0.05f, 10 );
 		curUser.spend( TIME_TO_UPGRADE );
 		curUser.busy();
 		
@@ -108,7 +109,17 @@ public class ArmorKit extends Item {
 		Sample.INSTANCE.play( Assets.Sounds.EVOKE );
 	}
 	
-	private final WndBag.Listener itemSelector = new WndBag.Listener() {
+	private final WndBag.ItemSelector itemSelector = new WndBag.ItemSelector() {
+		@Override
+		public String textPrompt() {
+			return "";
+		}
+
+		@Override
+		public boolean itemSelectable(Item item) {
+			return false;
+		}
+
 		@Override
 		public void onSelect( Item item ) {
 			if (item != null) {

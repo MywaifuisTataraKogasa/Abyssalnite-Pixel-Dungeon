@@ -22,7 +22,6 @@
 package com.shatteredpixel.shatteredpixeldungeon.items.scrolls.exotic;
 
 import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
-import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Buff;
 import com.shatteredpixel.shatteredpixeldungeon.items.artifacts.TimekeepersHourglass;
 import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.ScrollOfTeleportation;
 import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
@@ -40,8 +39,8 @@ public class ScrollOfPassage extends ExoticScroll {
 	
 	@Override
 	public void doRead() {
-		
-		setKnown();
+
+		identify();
 		
 		if (Dungeon.bossLevel()) {
 			
@@ -49,12 +48,12 @@ public class ScrollOfPassage extends ExoticScroll {
 			return;
 			
 		}
-		
-		Buff buff = Dungeon.hero.buff(TimekeepersHourglass.timeFreeze.class);
-		if (buff != null) buff.detach();
-		buff = Dungeon.hero.buff(Swiftthistle.TimeBubble.class);
-		if (buff != null) buff.detach();
-		
+
+		TimekeepersHourglass.timeFreeze timeFreeze = Dungeon.hero.buff(TimekeepersHourglass.timeFreeze.class);
+		if (timeFreeze != null) timeFreeze.disarmPressedTraps();
+		Swiftthistle.TimeBubble timeBubble = Dungeon.hero.buff(Swiftthistle.TimeBubble.class);
+		if (timeBubble != null) timeBubble.disarmPressedTraps();
+
 		InterlevelScene.mode = InterlevelScene.Mode.RETURN;
 		InterlevelScene.returnDepth = Math.max(1, (Dungeon.depth - 1 - (Dungeon.depth-2)%5));
 		InterlevelScene.returnPos = -1;

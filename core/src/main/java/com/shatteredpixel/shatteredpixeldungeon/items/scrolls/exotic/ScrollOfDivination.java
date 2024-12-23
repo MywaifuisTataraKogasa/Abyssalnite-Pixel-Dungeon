@@ -62,11 +62,6 @@ public class ScrollOfDivination extends ExoticScroll {
 		
 		int total = potions.size() + scrolls.size() + rings.size();
 		
-		if (total == 0){
-			GLog.n( Messages.get(this, "nothing_left") );
-			return;
-		}
-		
 		ArrayList<Item> IDed = new ArrayList<>();
 		int left = 4;
 		
@@ -85,7 +80,7 @@ public class ScrollOfDivination extends ExoticScroll {
 					}
 					probs[0]--;
 					Potion p = Reflection.newInstance(Random.element(potions));
-					p.setKnown();
+					p.identify();
 					IDed.add(p);
 					potions.remove(p.getClass());
 					break;
@@ -96,7 +91,7 @@ public class ScrollOfDivination extends ExoticScroll {
 					}
 					probs[1]--;
 					Scroll s = Reflection.newInstance(Random.element(scrolls));
-					s.setKnown();
+					s.identify();
 					IDed.add(s);
 					scrolls.remove(s.getClass());
 					break;
@@ -115,11 +110,15 @@ public class ScrollOfDivination extends ExoticScroll {
 			left --;
 			total --;
 		}
-		
-		GameScene.show(new WndDivination( IDed ));
+
+		if (total == 0){
+			GLog.n( Messages.get(this, "nothing_left") );
+		} else {
+			GameScene.show(new WndDivination(IDed));
+		}
 
 		readAnimation();
-		setKnown();
+		identify();
 	}
 	
 	private class WndDivination extends Window {

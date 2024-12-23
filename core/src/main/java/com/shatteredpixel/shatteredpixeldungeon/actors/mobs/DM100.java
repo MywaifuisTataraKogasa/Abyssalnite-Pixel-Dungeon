@@ -50,7 +50,8 @@ public class DM100 extends Mob implements Callback {
 		loot = Generator.Category.SCROLL;
 		lootChance = 0.25f;
 		
-		properties.add(Property.UNDEAD);
+		properties.add(Property.ELECTRIC);
+		properties.add(Property.INORGANIC);
 	}
 	
 	@Override
@@ -79,24 +80,22 @@ public class DM100 extends Mob implements Callback {
 	@Override
 	protected boolean doAttack( Char enemy ) {
 
-		if (Dungeon.level.distance( pos,enemy.pos ) <= 1) {
+		if (Dungeon.level.distance( pos, enemy.pos ) <= 1) {
 			
 			return super.doAttack( enemy );
 			
 		} else {
-			
-			if (sprite != null && (sprite.visible || enemy.sprite.visible)) {
-				sprite.zap( enemy.pos );
-			}
 			
 			spend( TIME_TO_ZAP );
 			
 			if (hit( this, enemy, true )) {
 				int dmg = Random.NormalIntRange(3, 10);
 				enemy.damage( dmg, new LightningBolt() );
-				
-				enemy.sprite.centerEmitter().burst( SparkParticle.FACTORY, 3 );
-				enemy.sprite.flash();
+
+				if (enemy.sprite.visible) {
+					enemy.sprite.centerEmitter().burst(SparkParticle.FACTORY, 3);
+					enemy.sprite.flash();
+				}
 				
 				if (enemy == Dungeon.hero) {
 					
@@ -111,7 +110,7 @@ public class DM100 extends Mob implements Callback {
 				enemy.sprite.showStatus( CharSprite.NEUTRAL,  enemy.defenseVerb() );
 			}
 			
-			if (sprite != null && sprite.visible) {
+			if (sprite != null && (sprite.visible || enemy.sprite.visible)) {
 				sprite.zap( enemy.pos );
 				return false;
 			} else {

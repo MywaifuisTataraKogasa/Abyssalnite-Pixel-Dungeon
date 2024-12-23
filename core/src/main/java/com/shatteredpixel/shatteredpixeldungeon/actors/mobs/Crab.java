@@ -40,8 +40,6 @@ public class Crab extends Mob {
 		
 		loot = new MysteryMeat();
 		lootChance = 0.167f;
-
-		properties.add(Property.UNDEAD);
 	}
 	
 	@Override

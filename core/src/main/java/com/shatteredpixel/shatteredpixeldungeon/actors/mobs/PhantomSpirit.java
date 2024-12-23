@@ -1,10 +1,10 @@
 package com.shatteredpixel.shatteredpixeldungeon.actors.mobs;
+
 import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Buff;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Corrosion;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.MaxGuard;
 import com.shatteredpixel.shatteredpixeldungeon.levels.traps.GrimTrap;
-import com.shatteredpixel.shatteredpixeldungeon.sprites.MirrorSprite;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.WraithSprite;
 
 

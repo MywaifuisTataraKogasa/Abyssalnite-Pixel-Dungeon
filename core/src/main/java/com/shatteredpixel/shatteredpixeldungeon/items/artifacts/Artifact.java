@@ -90,12 +90,9 @@ public class Artifact extends KindofMisc {
 	public boolean doUnequip( Hero hero, boolean collect, boolean single ) {
 		if (super.doUnequip( hero, collect, single )) {
 
-			passiveBuff.detach();
-			passiveBuff = null;
-
-			if (activeBuff != null){
-				activeBuff.detach();
-				activeBuff = null;
+			if (passiveBuff != null) {
+				passiveBuff.detach();
+				passiveBuff = null;
 			}
 
 			return true;
@@ -130,7 +127,7 @@ public class Artifact extends KindofMisc {
 
 	//transfers upgrades from another artifact, transfer level will equal the displayed level
 	public void transferUpgrade(int transferLvl) {
-		upgrade(Math.round((float)(transferLvl*levelCap)/10));
+		upgrade(Math.round((transferLvl*levelCap)/10f));
 	}
 
 	@Override
@@ -208,7 +205,7 @@ public class Artifact extends KindofMisc {
 
 	protected ArtifactBuff activeBuff() {return null; }
 	
-	public void charge(Hero target){
+	public void charge(Hero target, float amount){
 		//do nothing by default;
 	}
 
@@ -220,6 +217,10 @@ public class Artifact extends KindofMisc {
 
 		public boolean isCursed() {
 			return cursed;
+		}
+
+		public void charge(Hero target, float amount){
+			Artifact.this.charge(target, amount);
 		}
 
 	}

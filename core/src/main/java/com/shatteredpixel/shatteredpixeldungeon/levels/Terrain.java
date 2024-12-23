@@ -21,8 +21,6 @@
 
 package com.shatteredpixel.shatteredpixeldungeon.levels;
 
-import com.shatteredpixel.shatteredpixeldungeon.levels.traps.DisintegrationTrap;
-
 public class Terrain {
 
 	public static final int CHASM			= 0;
@@ -41,7 +39,6 @@ public class Terrain {
 	public static final int BARRICADE		= 13;
 	public static final int EMPTY_SP		= 14;
 	public static final int HIGH_GRASS		= 15;
-	public static final int SP_RUNE		= 31;
 	public static final int FURROWED_GRASS	= 30;
 
 	public static final int SECRET_DOOR	    = 16;
@@ -60,6 +57,8 @@ public class Terrain {
 	public static final int ALCHEMY			= 28;
 
 	public static final int WATER		    = 29;
+
+	public static final int SP_RUNE		= 31;
 	
 	public static final int PASSABLE		= 0x01;
 	public static final int LOS_BLOCKING	= 0x02;
@@ -71,8 +70,6 @@ public class Terrain {
 	public static final int PIT				= 0x80;
 	
 	public static final int[] flags = new int[256];
-
-
 	static {
 		flags[CHASM]		= AVOID	| PIT;
 		flags[EMPTY]		= PASSABLE;
@@ -93,7 +90,6 @@ public class Terrain {
 		flags[HIGH_GRASS]	= PASSABLE | LOS_BLOCKING | FLAMABLE;
 		flags[FURROWED_GRASS]= flags[HIGH_GRASS];
 		flags[SP_RUNE]		= flags[EMPTY];
-
 		flags[SECRET_DOOR]  = flags[WALL]  | SECRET;
 		flags[SECRET_TRAP]  = flags[EMPTY] | SECRET;
 		flags[TRAP]         = AVOID;

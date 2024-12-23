@@ -21,7 +21,6 @@
 
 package com.shatteredpixel.shatteredpixeldungeon.windows;
 
-import com.shatteredpixel.shatteredpixeldungeon.Assets;
 import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
 import com.shatteredpixel.shatteredpixeldungeon.GamesInProgress;
 import com.shatteredpixel.shatteredpixeldungeon.ShatteredPixelDungeon;
@@ -36,7 +35,6 @@ import com.shatteredpixel.shatteredpixeldungeon.ui.Icons;
 import com.shatteredpixel.shatteredpixeldungeon.ui.RedButton;
 import com.shatteredpixel.shatteredpixeldungeon.ui.Window;
 import com.watabou.noosa.Game;
-import com.watabou.noosa.Image;
 
 import java.io.IOException;
 
@@ -52,6 +50,7 @@ public class WndGame extends Window {
 		
 		super();
 
+		//settings
 		RedButton curBtn;
 		addButton( curBtn = new RedButton( Messages.get(this, "settings") ) {
 			@Override
@@ -111,53 +110,20 @@ public class WndGame extends Window {
 			curBtn.icon(Icons.get(Icons.RANKINGS));
 		}
 
-		if(!Dungeon.hero.ready){
-			addButton(curBtn = new
-					RedButton(Messages.get(this,"debug")){
-						@Override
-						protected void onClick() {
-							GameScene.logActorThread = true;
-						}
-					});
-			curBtn.icon(new
-					Image(Assets.Sprites.SPINNER,144,0,16,16));
-		}
-
-		addButtons(
-				// Main menu
-				new RedButton( Messages.get(this, "menu") ) {
-					@Override
-					protected void onClick() {
-						try {
-							Dungeon.saveAll();
-						} catch (IOException e) {
-							ShatteredPixelDungeon.reportException(e);
-						}
-						Game.switchScene(TitleScene.class);
-					}
-				},
-				// Quit
-				new RedButton( Messages.get(this, "exit") ) {
-					@Override
-					protected void onClick() {
-						try {
-							Dungeon.saveAll();
-						} catch (IOException e) {
-							ShatteredPixelDungeon.reportException(e);
-						}
-						Game.instance.finish();
-					}
-				}
-		);
-
-		// Cancel
-		addButton( new RedButton( Messages.get(this, "return") ) {
+		// Main menu
+		addButton(curBtn = new RedButton( Messages.get(this, "menu") ) {
 			@Override
 			protected void onClick() {
-				hide();
+				try {
+					Dungeon.saveAll();
+				} catch (IOException e) {
+					ShatteredPixelDungeon.reportException(e);
+				}
+				Game.switchScene(TitleScene.class);
 			}
 		} );
-		
+		curBtn.icon(Icons.get(Icons.DISPLAY));
+
 		resize( WIDTH, pos );
 	}
 	

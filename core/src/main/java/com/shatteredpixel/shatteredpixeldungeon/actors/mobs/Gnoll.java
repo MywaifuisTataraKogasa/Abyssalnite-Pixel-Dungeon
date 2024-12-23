@@ -22,8 +22,6 @@
 package com.shatteredpixel.shatteredpixeldungeon.actors.mobs;
 
 import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
-import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Buff;
-import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.DreadPlague;
 import com.shatteredpixel.shatteredpixeldungeon.items.Gold;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.GnollSprite;
 import com.watabou.utils.Random;
@@ -42,7 +40,7 @@ public class Gnoll extends Mob {
 		loot = Gold.class;
 		lootChance = 0.5f;
 	}
-
+	
 	@Override
 	public int damageRoll() {
 		return Random.NormalIntRange( 1, 6 );

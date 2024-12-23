@@ -25,7 +25,6 @@ import com.shatteredpixel.shatteredpixeldungeon.Assets;
 import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Actor;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
-import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Buff;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Hero;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.Mob;
 import com.shatteredpixel.shatteredpixeldungeon.items.artifacts.TimekeepersHourglass;
@@ -59,7 +58,8 @@ public class BeaconOfReturning extends Spell {
 		if (returnDepth == -1){
 			setBeacon(hero);
 		} else {
-			GameScene.show(new WndOptions(Messages.titleCase(name()),
+			GameScene.show(new WndOptions(new ItemSprite(this),
+					Messages.titleCase(name()),
 					Messages.get(BeaconOfReturning.class, "wnd_body"),
 					Messages.get(BeaconOfReturning.class, "wnd_set"),
 					Messages.get(BeaconOfReturning.class, "wnd_return")){
@@ -120,6 +120,9 @@ public class BeaconOfReturning extends Spell {
 		}
 		
 		if (returnDepth == Dungeon.depth) {
+			if (!Dungeon.level.passable[returnPos] && !Dungeon.level.avoid[returnPos]){
+				returnPos = Dungeon.level.entrance;
+			}
 			ScrollOfTeleportation.appear( hero, returnPos );
 			for(Mob m : Dungeon.level.mobs){
 				if (m.pos == hero.pos){
@@ -137,11 +140,11 @@ public class BeaconOfReturning extends Spell {
 			Dungeon.observe();
 			GameScene.updateFog();
 		} else {
-			
-			Buff buff = Dungeon.hero.buff(TimekeepersHourglass.timeFreeze.class);
-			if (buff != null) buff.detach();
-			buff = Dungeon.hero.buff(Swiftthistle.TimeBubble.class);
-			if (buff != null) buff.detach();
+
+			TimekeepersHourglass.timeFreeze timeFreeze = Dungeon.hero.buff(TimekeepersHourglass.timeFreeze.class);
+			if (timeFreeze != null) timeFreeze.disarmPressedTraps();
+			Swiftthistle.TimeBubble timeBubble = Dungeon.hero.buff(Swiftthistle.TimeBubble.class);
+			if (timeBubble != null) timeBubble.disarmPressedTraps();
 			
 			InterlevelScene.mode = InterlevelScene.Mode.RETURN;
 			InterlevelScene.returnDepth = returnDepth;

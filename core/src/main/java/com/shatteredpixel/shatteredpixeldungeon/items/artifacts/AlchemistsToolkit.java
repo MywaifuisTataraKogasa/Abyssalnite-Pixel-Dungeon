@@ -23,6 +23,7 @@ package com.shatteredpixel.shatteredpixeldungeon.items.artifacts;
 
 import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Hero;
+import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Talent;
 import com.shatteredpixel.shatteredpixeldungeon.items.Item;
 import com.shatteredpixel.shatteredpixeldungeon.items.Recipe;
 import com.shatteredpixel.shatteredpixeldungeon.items.rings.RingOfEnergy;
@@ -30,7 +31,6 @@ import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
 import com.shatteredpixel.shatteredpixeldungeon.scenes.AlchemyScene;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.ItemSpriteSheet;
 import com.shatteredpixel.shatteredpixeldungeon.utils.GLog;
-import com.shatteredpixel.shatteredpixeldungeon.windows.WndBag;
 import com.watabou.noosa.Game;
 import com.watabou.utils.Bundle;
 import com.watabou.utils.GameMath;
@@ -51,8 +51,6 @@ public class AlchemistsToolkit extends Artifact {
 	}
 
 	public static final String AC_BREW = "BREW";
-	
-	protected WndBag.Mode mode = WndBag.Mode.POTION;
 	
 	private boolean alchemyReady = false;
 
@@ -89,9 +87,9 @@ public class AlchemistsToolkit extends Artifact {
 	}
 	
 	@Override
-	public void charge(Hero target) {
+	public void charge(Hero target, float amount) {
 		if (charge < chargeCap){
-			partialCharge += 0.5f;
+			partialCharge += 0.5f*amount;
 			if (partialCharge >= 1){
 				partialCharge--;
 				charge++;
@@ -208,6 +206,7 @@ public class AlchemistsToolkit extends Artifact {
 		@Override
 		public void spendEnergy(int reduction) {
 			charge = Math.max(0, charge - reduction);
+			Talent.onArtifactUsed(Dungeon.hero);
 		}
 	}
 	

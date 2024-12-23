@@ -64,6 +64,7 @@ import com.shatteredpixel.shatteredpixeldungeon.plants.Plant;
 import com.shatteredpixel.shatteredpixeldungeon.plants.Swiftthistle;
 import com.shatteredpixel.shatteredpixeldungeon.scenes.GameScene;
 import com.shatteredpixel.shatteredpixeldungeon.scenes.InterlevelScene;
+import com.shatteredpixel.shatteredpixeldungeon.ui.Icons;
 import com.shatteredpixel.shatteredpixeldungeon.ui.TargetHealthIndicator;
 import com.shatteredpixel.shatteredpixeldungeon.utils.GLog;
 import com.shatteredpixel.shatteredpixeldungeon.windows.WndOptions;
@@ -96,6 +97,12 @@ public class CursedWand {
 		});
 	}
 
+	public static void tryForWandProc( Char target, Item origin ){
+		if (target != null && origin instanceof Wand){
+			Wand.wandProc(target, origin.buffedLvl(), 1);
+		}
+	}
+
 	public static boolean cursedEffect(final Item origin, final Char user, final Char target){
 		return cursedEffect(origin, user, target.pos);
 	}
@@ -126,11 +133,13 @@ public class CursedWand {
 					Buff.affect(user, Burning.class).reignite(user);
 					if (target != null) Buff.affect(target, Frost.class, Frost.DURATION);
 				}
+				tryForWandProc(target, origin);
 				return true;
 
 			//spawns some regrowth
 			case 1:
 				GameScene.add( Blob.seed(targetPos, 30, Regrowth.class));
+				tryForWandProc(Actor.findChar(targetPos), origin);
 				return true;
 
 			//random teleportation
@@ -145,6 +154,7 @@ public class CursedWand {
 					Char ch = Actor.findChar( targetPos );
 					if (ch != null && !ch.properties().contains(Char.Property.IMMOVABLE)) {
 						ScrollOfTeleportation.teleportChar(ch);
+						tryForWandProc(ch, origin);
 					} else {
 						return cursedEffect(origin, user, targetPos);
 					}
@@ -154,6 +164,7 @@ public class CursedWand {
 			//random gas at location
 			case 3:
 				Sample.INSTANCE.play( Assets.Sounds.GAS );
+				tryForWandProc(Actor.findChar(targetPos), origin);
 				switch (Random.Int(3)) {
 					case 0: default:
 						GameScene.add( Blob.seed( targetPos, 800, ConfusionGas.class ) );
@@ -181,6 +192,7 @@ public class CursedWand {
 						&& Dungeon.level.traps.get(pos) == null
 						&& !Dungeon.isChallenged(Challenges.NO_HERBALISM)) {
 					Dungeon.level.plant((Plant.Seed) Generator.randomUsingDefaults(Generator.Category.SEED), pos);
+					tryForWandProc(Actor.findChar(pos), origin);
 				} else {
 					return cursedEffect(origin, user, targetPos);
 				}
@@ -219,6 +231,7 @@ public class CursedWand {
 					} else {
 						Sample.INSTANCE.play(Assets.Sounds.BURNING);
 					}
+					tryForWandProc(target, origin);
 				} else {
 					return cursedEffect(origin, user, targetPos);
 				}
@@ -227,6 +240,7 @@ public class CursedWand {
 			//Bomb explosion
 			case 2:
 				new Bomb().explode(targetPos);
+				tryForWandProc(Actor.findChar(targetPos), origin);
 				return true;
 
 			//shock and recharge
@@ -284,11 +298,10 @@ public class CursedWand {
 					for (int i = 1; i < Dungeon.depth; i++) depths[i-1] = i;
 					int depth = 1+Random.chances(depths);
 
-					Buff buff = Dungeon.hero.buff(TimekeepersHourglass.timeFreeze.class);
-					if (buff != null) buff.detach();
-					
-					buff = Dungeon.hero.buff(Swiftthistle.TimeBubble.class);
-					if (buff != null) buff.detach();
+					TimekeepersHourglass.timeFreeze timeFreeze = Dungeon.hero.buff(TimekeepersHourglass.timeFreeze.class);
+					if (timeFreeze != null) timeFreeze.disarmPressedTraps();
+					Swiftthistle.TimeBubble timeBubble = Dungeon.hero.buff(Swiftthistle.TimeBubble.class);
+					if (timeBubble != null) timeBubble.disarmPressedTraps();
 
 					InterlevelScene.mode = InterlevelScene.Mode.RETURN;
 					InterlevelScene.returnDepth = depth;
@@ -371,7 +384,12 @@ public class CursedWand {
 						return cursedEffect(origin, user, targetPos);
 					} else {
 						GameScene.show(
-								new WndOptions("CURSED WAND ERROR", "this application will now self-destruct", "abort", "retry", "fail") {
+								new WndOptions(Icons.get(Icons.WARNING),
+										"CURSED WAND ERROR",
+										"this application will now self-destruct",
+										"abort",
+										"retry",
+										"fail") {
 									
 									@Override
 									protected void onSelect(int index) {

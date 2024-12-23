@@ -38,7 +38,6 @@ import com.shatteredpixel.shatteredpixeldungeon.mechanics.Ballistica;
 import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
 import com.shatteredpixel.shatteredpixeldungeon.scenes.GameScene;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.EarthGuardianSprite;
-import com.shatteredpixel.shatteredpixeldungeon.sprites.GuardSprite;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.ItemSpriteSheet;
 import com.shatteredpixel.shatteredpixeldungeon.ui.BuffIndicator;
 import com.watabou.noosa.audio.Sample;
@@ -65,7 +64,7 @@ public class WandOfLivingEarth extends DamageWand {
 	}
 	
 	@Override
-	protected void onZap(Ballistica bolt) {
+	public void onZap(Ballistica bolt) {
 		Char ch = Actor.findChar(bolt.collisionPos);
 		int damage = damageRoll();
 		int armorToAdd = damage;
@@ -94,7 +93,7 @@ public class WandOfLivingEarth extends DamageWand {
 		if (guardian != null && guardian == ch){
 			guardian.sprite.centerEmitter().burst(MagicMissile.EarthParticle.ATTRACT, 8 + buffedLvl() / 2);
 			guardian.setInfo(curUser, buffedLvl(), armorToAdd);
-			processSoulMark(guardian, chargesPerCast());
+			wandProc(guardian, chargesPerCast());
 			Sample.INSTANCE.play( Assets.Sounds.HIT_MAGIC, 1, 0.9f * Random.Float(0.87f, 1.15f) );
 
 		//shooting the guardian at a location
@@ -110,7 +109,7 @@ public class WandOfLivingEarth extends DamageWand {
 
 				ch.sprite.centerEmitter().burst(MagicMissile.EarthParticle.BURST, 5 + buffedLvl()/2);
 
-				processSoulMark(ch, chargesPerCast());
+				wandProc(ch, chargesPerCast());
 				ch.damage(damage, this);
 
 				int closest = -1;
@@ -154,7 +153,7 @@ public class WandOfLivingEarth extends DamageWand {
 
 				ch.sprite.centerEmitter().burst(MagicMissile.EarthParticle.BURST, 5 + buffedLvl() / 2);
 
-				processSoulMark(ch, chargesPerCast());
+				wandProc(ch, chargesPerCast());
 				ch.damage(damage, this);
 				Sample.INSTANCE.play( Assets.Sounds.HIT_MAGIC, 1, 0.8f * Random.Float(0.87f, 1.15f) );
 				
@@ -176,7 +175,7 @@ public class WandOfLivingEarth extends DamageWand {
 	}
 	
 	@Override
-	protected void fx(Ballistica bolt, Callback callback) {
+	public void fx(Ballistica bolt, Callback callback) {
 		MagicMissile.boltFromChar(curUser.sprite.parent,
 				MagicMissile.EARTH,
 				curUser.sprite,
@@ -195,7 +194,7 @@ public class WandOfLivingEarth extends DamageWand {
 			}
 		}
 		
-		int armor = Math.round(damage*0.25f);
+		int armor = Math.round(damage*0.33f);
 
 		if (guardian != null){
 			guardian.sprite.centerEmitter().burst(MagicMissile.EarthParticle.ATTRACT, 8 + buffedLvl() / 2);
@@ -205,13 +204,13 @@ public class WandOfLivingEarth extends DamageWand {
 			Buff.affect(attacker, RockArmor.class).addArmor( buffedLvl(), armor);
 		}
 	}
-
+	
 	@Override
 	public void staffFx(MagesStaff.StaffParticle particle) {
 		if (Random.Int(10) == 0){
-			particle.color(ColorMath.random(0x941313, 0x54B4AD));
+			particle.color(ColorMath.random(0xFFF568, 0x80791A));
 		} else {
-			particle.color(ColorMath.random(0x9D3737, 0x5475B2));
+			particle.color(ColorMath.random(0x805500, 0x332500));
 		}
 		particle.am = 1f;
 		particle.setLifespan(2f);
@@ -304,7 +303,7 @@ public class WandOfLivingEarth extends DamageWand {
 
 		private int wandLevel = -1;
 
-		private void setInfo(Hero hero, int wandLevel, int healthToAdd){
+		public void setInfo(Hero hero, int wandLevel, int healthToAdd){
 			if (wandLevel > this.wandLevel) {
 				this.wandLevel = wandLevel;
 				HT = 16 + 8 * wandLevel;

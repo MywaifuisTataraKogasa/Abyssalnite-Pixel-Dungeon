@@ -50,7 +50,7 @@ public class WndSupportPrompt extends Window {
 		if (Messages.lang() != Languages.ENGLISH) {
 			message += "\n" + Messages.get(SupporterScene.class, "patreon_english");
 		}
-		message += "\n- CodenameE";
+		message += "\n- Evan";
 
 		RenderedTextBlock text = PixelScene.renderTextBlock( 6 );
 		text.text( message, width );
@@ -61,7 +61,7 @@ public class WndSupportPrompt extends Window {
 			@Override
 			protected void onClick() {
 				super.onClick();
-				String link = "https://jq.qq.com/?_wv=1027&k=HiUGPIiV";
+				String link = "https://www.patreon.com/ShatteredPixel";
 				//tracking codes, so that the website knows where this pageview came from
 				link += "?utm_source=shatteredpd";
 				link += "&utm_medium=supporter_prompt";

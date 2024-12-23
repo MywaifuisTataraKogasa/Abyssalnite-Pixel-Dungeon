@@ -119,7 +119,8 @@ public class TomeOfMastery extends Item {
 		Sample.INSTANCE.play( Assets.Sounds.MASTERY );
 		
 		SpellSprite.show( curUser, SpellSprite.MASTERY );
-		curUser.sprite.emitter().burst( Speck.factory( Speck.MASTERY ), 12 );
+		//TODO 效果原 MASTERY
+		curUser.sprite.emitter().burst( Speck.factory( Speck.STAR ), 12 );
 		GLog.w( Messages.get(this, "way", way.title()) );
 		
 	}
