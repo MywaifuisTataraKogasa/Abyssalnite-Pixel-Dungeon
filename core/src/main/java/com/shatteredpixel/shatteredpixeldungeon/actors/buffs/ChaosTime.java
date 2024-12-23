@@ -30,7 +30,7 @@ public class ChaosTime extends FlavourBuff {
 
     @Override
     public int icon() {
-        return BuffIndicator.SLOW;
+        return BuffIndicator.TIME;
     }
 
     @Override

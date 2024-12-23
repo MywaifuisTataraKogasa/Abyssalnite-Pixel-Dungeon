@@ -52,23 +52,23 @@ import com.watabou.utils.DeviceCompat;
 import java.util.Date;
 
 public class TitleScene extends PixelScene {
-	
+
 	@Override
 	public void create() {
-		
+
 		super.create();
 
 		Music.INSTANCE.play( Assets.Music.THEME, true );
 
 		uiCamera.visible = false;
-		
+
 		int w = Camera.main.width;
 		int h = Camera.main.height;
-		
+
 		Archs archs = new Archs();
 		archs.setSize( w, h );
 		add( archs );
-		
+
 		Image title = BannerSprites.get( BannerSprites.Type.PIXEL_DUNGEON );
 		add( title );
 
@@ -102,7 +102,7 @@ public class TitleScene extends PixelScene {
 		add( signs );
 
 		final Chrome.Type GREY_TR = Chrome.Type.GREY_BUTTON_TR;
-		
+
 		StyledButton btnPlay = new StyledButton(GREY_TR, Messages.get(this, "enter")){
 			@Override
 			protected void onClick() {
@@ -114,7 +114,7 @@ public class TitleScene extends PixelScene {
 					ShatteredPixelDungeon.switchNoFade( StartScene.class );
 				}
 			}
-			
+
 			@Override
 			protected boolean onLongClick() {
 				//making it easier to start runs quickly while debugging
@@ -170,7 +170,7 @@ public class TitleScene extends PixelScene {
 		};
 		btnAbout.icon(Icons.get(Icons.SHPX));
 		add(btnAbout);
-		
+
 		final int BTN_HEIGHT = 20;
 		int GAP = (int)(h - topRegion - (landscape() ? 3 : 4)*BTN_HEIGHT)/3;
 		GAP /= landscape() ? 3 : 5;
@@ -207,7 +207,7 @@ public class TitleScene extends PixelScene {
 
 		fadeIn();
 	}
-	
+
 	private void placeTorch( float x, float y ) {
 		Fireball fb = new Fireball();
 		fb.setPos( x, y );
@@ -287,7 +287,6 @@ public class TitleScene extends PixelScene {
 				AvailableUpdateData update = Updates.updateData();
 
 				ShatteredPixelDungeon.scene().addToFront( new WndOptions(
-						Icons.get(Icons.CHANGES),
 						update.versionName == null ? Messages.get(this,"title") : Messages.get(this,"versioned_title", update.versionName),
 						update.desc == null ? Messages.get(this,"desc") : update.desc,
 						Messages.get(this,"update"),

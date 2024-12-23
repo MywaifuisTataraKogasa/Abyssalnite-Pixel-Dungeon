@@ -25,6 +25,7 @@ import com.shatteredpixel.shatteredpixeldungeon.Assets;
 import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
 import com.shatteredpixel.shatteredpixeldungeon.SPDAction;
 import com.shatteredpixel.shatteredpixeldungeon.Statistics;
+import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.AbyssalInfection;
 import com.shatteredpixel.shatteredpixeldungeon.effects.Speck;
 import com.shatteredpixel.shatteredpixeldungeon.items.Item;
 import com.shatteredpixel.shatteredpixeldungeon.journal.Document;
@@ -62,6 +63,8 @@ public class StatusPane extends Component {
 	private Image shieldedHP;
 	private Image hp;
 	private BitmapText hpText;
+
+	private Image infection;
 
 	private Image exp;
 
@@ -130,6 +133,9 @@ public class StatusPane extends Component {
 		hpText.alpha(0.6f);
 		add(hpText);
 
+		infection = new Image( Assets.Interfaces.INFECTION_BAR );
+		add( infection );
+
 		exp = new Image( Assets.Interfaces.XP_BAR );
 		add( exp );
 
@@ -176,6 +182,9 @@ public class StatusPane extends Component {
 		hp.x = shieldedHP.x = rawShielding.x = 30;
 		hp.y = shieldedHP.y = rawShielding.y = 3;
 
+		infection.x = 30;
+		infection.y = 8;
+
 		hpText.scale.set(PixelScene.align(0.5f));
 		hpText.x = hp.x + 1;
 		hpText.y = hp.y + (hp.height - (hpText.baseLine()+hpText.scale.y))/2f;
@@ -190,7 +199,7 @@ public class StatusPane extends Component {
 
 		danger.setPos( width - danger.width(), 20 );
 
-		buffs.setPos( 31, 9 );
+		buffs.setPos( 31, 13 );
 
 		btnJournal.setPos( width - 42, 1 );
 
@@ -212,6 +221,15 @@ public class StatusPane extends Component {
 		int health = Dungeon.hero.HP;
 		int shield = Dungeon.hero.shielding();
 		int max = Dungeon.hero.HT;
+		float maxinfection = (Float) AbyssalInfection.HARDINFECTION;
+
+		AbyssalInfection infectionbuff = Dungeon.hero.buff(AbyssalInfection.class);
+		if (infectionbuff != null){
+			float abinfection = Math.max(0,maxinfection - infectionbuff.hunger());
+			infection.scale.x = (float) abinfection / (float) maxinfection;}
+		else if(Dungeon.hero.isAlive()){
+			infection.scale.x = 0;
+		}
 
 		if (!Dungeon.hero.isAlive()) {
 			avatar.tint(0x000000, 0.5f);

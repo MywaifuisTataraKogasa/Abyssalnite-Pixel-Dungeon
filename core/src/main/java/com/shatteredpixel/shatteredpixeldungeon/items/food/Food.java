@@ -55,6 +55,7 @@ public class Food extends Item {
 		image = ItemSpriteSheet.RATION;
 
 		bones = true;
+		defaultAction = AC_EAT;
 	}
 
 	@Override

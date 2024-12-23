@@ -23,7 +23,6 @@ package com.shatteredpixel.shatteredpixeldungeon.scenes;
 
 import com.shatteredpixel.shatteredpixeldungeon.ShatteredPixelDungeon;
 import com.shatteredpixel.shatteredpixeldungeon.effects.Flare;
-import com.shatteredpixel.shatteredpixeldungeon.ui.Archs;
 import com.shatteredpixel.shatteredpixeldungeon.ui.ExitButton;
 import com.shatteredpixel.shatteredpixeldungeon.ui.Icons;
 import com.shatteredpixel.shatteredpixeldungeon.ui.RenderedTextBlock;
@@ -50,13 +49,6 @@ public class AboutScene extends PixelScene {
 		int w = Camera.main.width;
 		int h = Camera.main.height;
 
-		Archs archs = new Archs();
-		archs.setSize( w, h );
-		add( archs );
-
-		//darkens the arches
-		add(new ColorBlock(w, h, 0x88000000));
-
 		ScrollPane list = new ScrollPane( new Component() );
 		add( list );
 
@@ -77,11 +69,7 @@ public class AboutScene extends PixelScene {
 				"Developed by: _Evan Debenham_\nBased on Pixel Dungeon's open source",
 				"ShatteredPixel.com",
 				shpxLink);
-		if (landscape()){
-			shpx.setRect((w - fullWidth)/2f - 6, 10, 120, 0);
-		} else {
-			shpx.setRect((w - fullWidth)/2f, 6, 120, 0);
-		}
+		shpx.setRect((w - fullWidth)/2f, 6, 120, 0);
 		content.add(shpx);
 
 		CreditsBlock alex = new CreditsBlock(false, Window.SHPX_COLOR,
@@ -92,7 +80,7 @@ public class AboutScene extends PixelScene {
 				"https://www.alekskomitov.com");
 		alex.setSize(colWidth/2f, 0);
 		if (landscape()){
-			alex.setPos(shpx.right(), shpx.top() + (shpx.height() - alex.height()*2)/2f);
+			alex.setPos(shpx.right(), shpx.top() + (shpx.height() - alex.height())/2f);
 		} else {
 			alex.setPos(w/2f - colWidth/2f, shpx.bottom()+5);
 		}
@@ -107,15 +95,6 @@ public class AboutScene extends PixelScene {
 		charlie.setRect(alex.right(), alex.top(), colWidth/2f, 0);
 		content.add(charlie);
 
-		CreditsBlock kristjan = new CreditsBlock(false, Window.SHPX_COLOR,
-				"Music:",
-				Icons.KRISTJAN.get(),
-				"Kristjan Haaristo",
-				"youtube.com/user/...",
-				"https://www.youtube.com/channel/UCL1e7SgzSWbD_DQxB_5YcLA");
-		kristjan.setRect(alex.right() - colWidth/4f, alex.bottom() + 5, colWidth/2f, 0);
-		content.add(kristjan);
-
 		//*** Pixel Dungeon Credits ***
 
 		final int WATA_COLOR = 0x55AAFF;
@@ -126,9 +105,9 @@ public class AboutScene extends PixelScene {
 				"pixeldungeon.watabou.ru",
 				"http://pixeldungeon.watabou.ru");
 		if (landscape()){
-			wata.setRect(shpx.left(), kristjan.bottom() + 8, colWidth, 0);
+			wata.setRect(shpx.left(), shpx.bottom() + 8, colWidth, 0);
 		} else {
-			wata.setRect(shpx.left(), kristjan.bottom() + 8, colWidth, 0);
+			wata.setRect(shpx.left(), alex.bottom() + 8, colWidth, 0);
 		}
 		content.add(wata);
 
@@ -142,22 +121,22 @@ public class AboutScene extends PixelScene {
 				null);
 		cube.setSize(colWidth/2f, 0);
 		if (landscape()){
-			cube.setPos(wata.right() + colWidth/4f, wata.top() + (wata.height() - cube.height())/2f);
+			cube.setPos(wata.right(), wata.top() + (wata.height() - cube.height())/2f);
 		} else {
-			cube.setPos(alex.left() + colWidth/4f, wata.bottom()+5);
+			cube.setPos(alex.left(), wata.bottom()+5);
 		}
 		content.add(cube);
 
-		//*** libGDX Credits ***
+		//*** LibGDX Credits ***
 
 		final int GDX_COLOR = 0xE44D3C;
 		CreditsBlock gdx = new CreditsBlock(true,
 				GDX_COLOR,
-				"libGDX",
+				null,
 				Icons.LIBGDX.get(),
-				"ShatteredPD is powered by _libGDX_!",
-				"libGDX.com",
-				"https://libGDX.com/");
+				"ShatteredPD is powered by _LibGDX_!",
+				"libgdx.badlogicgames.com",
+				"http://libgdx.badlogicgames.com");
 		if (landscape()){
 			gdx.setRect(wata.left(), wata.bottom() + 8, colWidth, 0);
 		} else {
@@ -166,6 +145,12 @@ public class AboutScene extends PixelScene {
 		content.add(gdx);
 
 		addLine(gdx.top() - 4, content);
+
+		//blocks the rays from the LibGDX icon going above the line
+		ColorBlock blocker = new ColorBlock(w, 8, 0xFF000000);
+		blocker.y = gdx.top() - 12;
+		content.addToBack(blocker);
+		content.sendToBack(gdx);
 
 		CreditsBlock arcnor = new CreditsBlock(false, GDX_COLOR,
 				"Pixel Dungeon GDX:",
@@ -199,7 +184,7 @@ public class AboutScene extends PixelScene {
 				"ShatteredPD is community-translated via _Transifex_! Thank you so much to all of Shattered's volunteer translators!",
 				"www.transifex.com/shattered-pixel/",
 				"https://www.transifex.com/shattered-pixel/shattered-pixel-dungeon/");
-		transifex.setRect((Camera.main.width - colWidth)/2f, purigro.bottom() + 12, colWidth, 0);
+		transifex.setRect((Camera.main.width - colWidth)/2f, purigro.bottom() + 8, colWidth, 0);
 		content.add(transifex);
 
 		addLine(transifex.top() - 4, content);
@@ -214,26 +199,26 @@ public class AboutScene extends PixelScene {
 				null,
 				"Shattered Pixel Dungeon uses the following sound samples from _freesound.org_:\n\n" +
 
-				"Creative Commons Attribution License:\n" +
-				"_SFX ATTACK SWORD 001.wav_ by _JoelAudio_\n" +
-				"_Pack: Slingshots and Longbows_ by _saturdaysoundguy_\n" +
-				"_Cracking/Crunching, A.wav_ by _InspectorJ_\n" +
-				"_Extracting a sword.mp3_ by _Taira Komori_\n" +
-				"_Pack: Uni Sound Library_ by _timmy h123_\n\n" +
+						"Creative Commons Attribution License:\n" +
+						"_SFX ATTACK SWORD 001.wav_ by _JoelAudio_\n" +
+						"_Pack: Slingshots and Longbows_ by _saturdaysoundguy_\n" +
+						"_Cracking/Crunching, A.wav_ by _InspectorJ_\n" +
+						"_Extracting a sword.mp3_ by _Taira Komori_\n" +
+						"_Pack: Uni Sound Library_ by _timmy h123_\n\n" +
 
-				"Creative Commons Zero License:\n" +
-				"_Pack: Movie Foley: Swords_ by _Black Snow_\n" +
-				"_machine gun shot 2.flac_ by _qubodup_\n" +
-				"_m240h machine gun burst 4.flac_ by _qubodup_\n" +
-				"_Pack: Onomatopoeia_ by _Adam N_\n" +
-				"_Pack: Watermelon_ by _lolamadeus_\n" +
-				"_metal chain_ by _Mediapaja2009_\n" +
-				"_Pack: Sword Clashes Pack_ by _JohnBuhr_\n" +
-				"_Pack: Metal Clangs and Pings_ by _wilhellboy_\n" +
-				"_Pack: Stabbing Stomachs & Crushing Skulls_ by _TheFilmLook_\n" +
-				"_Sheep bleating_ by _zachrau_\n" +
-				"_Lemon,Juicy,Squeeze,Fruit.wav_ by _Filipe Chagas_\n" +
-				"_Lemon,Squeeze,Squishy,Fruit.wav_ by _Filipe Chagas_",
+						"Creative Commons Zero License:\n" +
+						"_Pack: Movie Foley: Swords_ by _Black Snow_\n" +
+						"_machine gun shot 2.flac_ by _qubodup_\n" +
+						"_m240h machine gun burst 4.flac_ by _qubodup_\n" +
+						"_Pack: Onomatopoeia_ by _Adam N_\n" +
+						"_Pack: Watermelon_ by _lolamadeus_\n" +
+						"_metal chain_ by _Mediapaja2009_\n" +
+						"_Pack: Sword Clashes Pack_ by _JohnBuhr_\n" +
+						"_Pack: Metal Clangs and Pings_ by _wilhellboy_\n" +
+						"_Pack: Stabbing Stomachs & Crushing Skulls_ by _TheFilmLook_\n" +
+						"_Sheep bleating_ by _zachrau_\n" +
+						"_Lemon,Juicy,Squeeze,Fruit.wav_ by _Filipe Chagas_\n" +
+						"_Lemon,Squeeze,Squishy,Fruit.wav_ by _Filipe Chagas_",
 				"www.freesound.org",
 				"https://www.freesound.org");
 		freesound.setRect(transifex.left()-10, transifex.bottom() + 8, colWidth+20, 0);
@@ -248,9 +233,9 @@ public class AboutScene extends PixelScene {
 		btnExit.setPos( Camera.main.width - btnExit.width(), 0 );
 		add( btnExit );
 
-		//fadeIn();
+		fadeIn();
 	}
-	
+
 	@Override
 	protected void onBackPressed() {
 		ShatteredPixelDungeon.switchScene(TitleScene.class);

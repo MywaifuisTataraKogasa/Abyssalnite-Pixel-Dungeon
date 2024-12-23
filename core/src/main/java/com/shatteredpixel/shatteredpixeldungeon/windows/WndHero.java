@@ -52,7 +52,7 @@ public class WndHero extends WndTabbed {
 	private static final int HEIGHT		= 120;
 	
 	private StatsTab stats;
-	private TalentsTab talents;
+
 	private BuffsTab buffs;
 
 	public static int lastIdx = 0;
@@ -66,10 +66,6 @@ public class WndHero extends WndTabbed {
 		stats = new StatsTab();
 		add( stats );
 
-		talents = new TalentsTab();
-		add(talents);
-		talents.setRect(0, 0, WIDTH, HEIGHT);
-
 		buffs = new BuffsTab();
 		add( buffs );
 		buffs.setRect(0, 0, WIDTH, HEIGHT);
@@ -82,14 +78,7 @@ public class WndHero extends WndTabbed {
 				stats.visible = stats.active = selected;
 			}
 		} );
-		add( new LabeledTab( Messages.get(this, "talents") ) {
-			protected void select( boolean value ) {
-				super.select( value );
-				if (selected) lastIdx = 1;
-				if (selected) StatusPane.talentBlink = 0;
-				talents.visible = talents.active = selected;
-			}
-		} );
+
 		add( new LabeledTab( Messages.get(this, "buffs") ) {
 			protected void select( boolean value ) {
 				super.select( value );
@@ -99,10 +88,6 @@ public class WndHero extends WndTabbed {
 		} );
 
 		layoutTabs();
-
-		talents.setRect(0, 0, WIDTH, HEIGHT);
-		talents.pane.scrollTo(0, talents.pane.content().height() - talents.pane.height());
-		talents.layout();
 
 		select( lastIdx );
 	}

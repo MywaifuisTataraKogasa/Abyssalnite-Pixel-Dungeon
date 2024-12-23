@@ -302,7 +302,7 @@ public class WndJournal extends WndTabbed {
 				case Document.GUIDE_INTRO: default:
 					return new ItemSprite(ItemSpriteSheet.MASTERY);
 				case "Examining":
-					return Icons.get(Icons.MAGNIFY);
+					return Icons.get(Icons.SCROLL_HOLDER);
 				case "Surprise_Attacks":
 					return new ItemSprite( ItemSpriteSheet.ASSASSINS_BLADE );
 				case "Identifying":
@@ -312,15 +312,13 @@ public class WndJournal extends WndTabbed {
 				case "Dieing":
 					return new ItemSprite( ItemSpriteSheet.TOMB );
 				case Document.GUIDE_SEARCHING:
-					return Icons.get(Icons.MAGNIFY);
+					return Icons.get(Icons.SCROLL_HOLDER);
 				case "Strength":
 					return new ItemSprite( ItemSpriteSheet.GREATAXE );
 				case "Upgrades":
 					return new ItemSprite( ItemSpriteSheet.RING_EMERALD );
 				case "Looting":
 					return new ItemSprite( ItemSpriteSheet.CRYSTAL_KEY );
-				case "Levelling":
-					return Icons.get(Icons.TALENT);
 				case "Positioning":
 					return new ItemSprite( ItemSpriteSheet.SPIRIT_BOW );
 				case "Magic":

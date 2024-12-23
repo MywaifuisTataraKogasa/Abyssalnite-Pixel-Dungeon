@@ -174,34 +174,7 @@ public class WndRanking extends WndTabbed {
 			
 			float pos = title.bottom() + GAP;
 
-			RedButton btnTalents = new RedButton( Messages.get(this, "talents") ){
-				@Override
-				protected void onClick() {
-					//removes talents from upper tiers
-					int tiers = 1;
-					if (Dungeon.hero.lvl >= 6) tiers++;
-					if (Dungeon.hero.lvl >= 12 && Dungeon.hero.subClass != HeroSubClass.NONE) tiers++;
-					if (Dungeon.hero.lvl >= 20 && Dungeon.hero.armorAbility != null) tiers++;
-					while (Dungeon.hero.talents.size() > tiers){
-						Dungeon.hero.talents.remove(Dungeon.hero.talents.size()-1);
-					}
-					Game.scene().addToFront( new Window(){
-						{
-							TalentsPane p = new TalentsPane(false);
-							add(p);
-							p.setPos(0, 0);
-							p.setSize(120, p.content().height());
-							resize((int)p.width(), (int)p.height());
-							p.setPos(0, 0);
-						}
-					});
-				}
-			};
-			btnTalents.icon(Icons.get(Icons.TALENT));
-			btnTalents.setRect( (WIDTH - btnTalents.reqWidth()+2)/2, pos, btnTalents.reqWidth()+2 , 16 );
-			add(btnTalents);
-
-			pos = btnTalents.bottom();
+			pos = title.bottom();
 
 			if (Dungeon.challenges > 0) {
 				RedButton btnChallenges = new RedButton( Messages.get(this, "challenges") ) {
@@ -215,10 +188,9 @@ public class WndRanking extends WndTabbed {
 				btnChallenges.setSize( btnChallenges.reqWidth()+2, 16 );
 				add( btnChallenges );
 
-				float left = (WIDTH - btnTalents.width() - btnChallenges.width())/3f;
+				float left = (WIDTH - title.width() - btnChallenges.width())/3f;
 
-				btnTalents.setPos(left, btnTalents.top());
-				btnChallenges.setPos(btnTalents.right() + left, btnTalents.top());
+				btnChallenges.setPos(title.right() + left, title.top());
 			}
 
 			pos += GAP;

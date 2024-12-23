@@ -45,7 +45,6 @@ import java.util.LinkedHashMap;
 public class WndHeroInfo extends WndTabbed {
 
 	private HeroInfoTab heroInfo;
-	private TalentInfoTab talentInfo;
 	private SubclassInfoTab subclassInfo;
 	private ArmorAbilityInfoTab abilityInfo;
 
@@ -86,19 +85,6 @@ public class WndHeroInfo extends WndTabbed {
 			}
 		});
 
-		talentInfo = new TalentInfoTab(cl);
-		add(talentInfo);
-		talentInfo.setSize(WIDTH, MIN_HEIGHT);
-		finalHeight = (int)Math.max(finalHeight, talentInfo.height());
-
-		add( new IconTab( Icons.get(Icons.TALENT) ){
-			@Override
-			protected void select(boolean value) {
-				super.select(value);
-				talentInfo.visible = talentInfo.active = value;
-			}
-		});
-
 		if (Badges.isUnlocked(Badges.Badge.BOSS_SLAIN_2)) {
 			subclassInfo = new SubclassInfoTab(cl);
 			add(subclassInfo);
@@ -132,7 +118,6 @@ public class WndHeroInfo extends WndTabbed {
 		resize(WIDTH, finalHeight);
 
 		layoutTabs();
-		talentInfo.layout();
 
 		select(0);
 

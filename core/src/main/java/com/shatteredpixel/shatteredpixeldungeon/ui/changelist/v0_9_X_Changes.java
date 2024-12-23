@@ -195,33 +195,33 @@ public class v0_9_X_Changes {
 				"_-_ Burning Fist now evaporates water 20% more often\n" +
 				"_-_ Bleed damage taken by Rotting Fist reduced by 10%" ));
 
-		changes.addButton(new ChangeButton(Icons.get(Icons.TALENT), "Talent Buffs",
-				"I'm making changes to a bunch of talents that were underperforming in v0.9.2:\n\n" +
-				"_- Strongman_ redesigned. Now grants 8/13/18% bonus str, rounded down.\n" +
-				"_- Berserking Stamina_ bonus shield increased to 25/50/75%, from 16/33/50%.\n" +
-				"_- Cleave_ turns of combo increased to 15/30/45 from 10/20/30.\n\n" +
-				"_- Energizing Upgrade_ charge granted up to 3/5 from 2/3.\n" +
-				"_- Empowering Scrolls_ no longer has a timer.\n" +
-				"_- Empowered Strike_ damage bonus up to 25/50/75% from 20/40/60%.\n" +
-				"_- Necromancer's Minions_ proc chance up to 13/27/40% from 10/20/30%.\n\n" +
-				"_- Light Cloak_ charge speed up to 13/27/40% from 10/20/30%.\n" +
-				"_- Enhanced Lethality_ boosted at high levels of preparation.\n\n" +
-				"_- Nature's Bounty_ is now more consistent in how it drops berries.\n" +
-				"_- Shared Upgrades_ damage boost increased to 10/20/30% from 7/12/20%." ));
+//		changes.addButton(new ChangeButton(Icons.get(Icons.TALENT), "Talent Buffs",
+//				"I'm making changes to a bunch of talents that were underperforming in v0.9.2:\n\n" +
+//				"_- Strongman_ redesigned. Now grants 8/13/18% bonus str, rounded down.\n" +
+//				"_- Berserking Stamina_ bonus shield increased to 25/50/75%, from 16/33/50%.\n" +
+//				"_- Cleave_ turns of combo increased to 15/30/45 from 10/20/30.\n\n" +
+//				"_- Energizing Upgrade_ charge granted up to 3/5 from 2/3.\n" +
+//				"_- Empowering Scrolls_ no longer has a timer.\n" +
+//				"_- Empowered Strike_ damage bonus up to 25/50/75% from 20/40/60%.\n" +
+//				"_- Necromancer's Minions_ proc chance up to 13/27/40% from 10/20/30%.\n\n" +
+//				"_- Light Cloak_ charge speed up to 13/27/40% from 10/20/30%.\n" +
+//				"_- Enhanced Lethality_ boosted at high levels of preparation.\n\n" +
+//				"_- Nature's Bounty_ is now more consistent in how it drops berries.\n" +
+//				"_- Shared Upgrades_ damage boost increased to 10/20/30% from 7/12/20%." ));
 
 		changes = new ChangeInfo(Messages.get(ChangesScene.class, "nerfs"), false, null);
 		changes.hardlight(CharSprite.NEGATIVE);
 		changeInfos.add(changes);
 
-		changes.addButton(new ChangeButton(Icons.get(Icons.TALENT), "Talent Nerfs",
-				"I'm also scaling back some talents that were overperforming in v0.9.2:\n\n" +
-				"_- Improvised Projectiles_ cooldown up to 50 turns from 30.\n\n" +
-				"_- Backup Barrier_ shield down to 3/5 from 4/6.\n" +
-				"_- Ally Warp_ range down to 2/4/6 from 3/6/9.\n" +
-				"_- Soul Siphon_ effectiveness down to 13/27/40% from 15/30/45%.\n\n" +
-				"_- Bounty Hunter_ gold increased by 50%, but it now has a 25% chance to activate per level of preparation.\n\n" +
-				"_- Rejuvenating Steps_ now starts producing furrowed grass after not gaining exp for a while.\n" +
-				"_- Barkskin_ redesigned. Now grants 50/100/150% of your level in barkskin, which fades every turn." ));
+//		changes.addButton(new ChangeButton(Icons.get(Icons.TALENT), "Talent Nerfs",
+//				"I'm also scaling back some talents that were overperforming in v0.9.2:\n\n" +
+//				"_- Improvised Projectiles_ cooldown up to 50 turns from 30.\n\n" +
+//				"_- Backup Barrier_ shield down to 3/5 from 4/6.\n" +
+//				"_- Ally Warp_ range down to 2/4/6 from 3/6/9.\n" +
+//				"_- Soul Siphon_ effectiveness down to 13/27/40% from 15/30/45%.\n\n" +
+//				"_- Bounty Hunter_ gold increased by 50%, but it now has a 25% chance to activate per level of preparation.\n\n" +
+//				"_- Rejuvenating Steps_ now starts producing furrowed grass after not gaining exp for a while.\n" +
+//				"_- Barkskin_ redesigned. Now grants 50/100/150% of your level in barkskin, which fades every turn." ));
 
 		changes = new ChangeInfo("v0.9.2", true, "");
 		changes.hardlight(Window.TITLE_COLOR);
@@ -237,10 +237,10 @@ public class v0_9_X_Changes {
 				"\n" +
 				"Dev commentary will be added here in the future."));
 
-		changes.addButton(new ChangeButton(Icons.get(Icons.TALENT), "Tier Three Talents!",
-				"_32 new talents have been added that span levels 13 to 20!_\n\n" +
-				"These talents are a bit different than the previous tiers. They require 3 points each, are balanced to encourage specialization, and vary based on class and subclass!\n\n" +
-				"There is one more tier of talents left to be implemented, currently slated for v0.9.3. This tier will span levels 21-30, and will interact with an existing mechanic..."));
+//		changes.addButton(new ChangeButton(Icons.get(Icons.TALENT), "Tier Three Talents!",
+//				"_32 new talents have been added that span levels 13 to 20!_\n\n" +
+//				"These talents are a bit different than the previous tiers. They require 3 points each, are balanced to encourage specialization, and vary based on class and subclass!\n\n" +
+//				"There is one more tier of talents left to be implemented, currently slated for v0.9.3. This tier will span levels 21-30, and will interact with an existing mechanic..."));
 
 		changes.addButton( new ChangeButton( new Image(Assets.Sprites.WARRIOR, 0, 90, 12, 15), HeroSubClass.GLADIATOR.title(),
 				"I've made a variety of changes to _the Gladiator_ to make combo moves more interesting, flexible, and easier to build to:\n\n" +
@@ -391,10 +391,10 @@ public class v0_9_X_Changes {
 				"\n" +
 				"Dev commentary will be added here in the future."));
 
-		changes.addButton(new ChangeButton(Icons.get(Icons.TALENT), "Tier Two Talents!",
-				"_A second tier of talents has been added, including twenty new talents spanning levels 7-12!_\n\n" +
-				"The second talent tier is similar to the first, but talent powers are much less focused on the early game. Expect effects that are useful all game long.\n\n" +
-				"Look forward to tier 3 of the talent system coming in v0.9.2, which will span levels 13-20."));
+//		changes.addButton(new ChangeButton(Icons.get(Icons.TALENT), "Tier Two Talents!",
+//				"_A second tier of talents has been added, including twenty new talents spanning levels 7-12!_\n\n" +
+//				"The second talent tier is similar to the first, but talent powers are much less focused on the early game. Expect effects that are useful all game long.\n\n" +
+//				"Look forward to tier 3 of the talent system coming in v0.9.2, which will span levels 13-20."));
 
 		changes.addButton(new ChangeButton(Icons.get(Icons.DEPTH), "Levelgen Improvements!",
 				"_The game's level generation system has received a number of improvements!:_\n\n" +
@@ -414,15 +414,15 @@ public class v0_9_X_Changes {
 				"_-_ Short-range mind vision is no longer an innate huntress power, it is now a talent.\n\n" +
 				"_-_ The Rogue no longer causes the game to spawn slightly more secret rooms. Instead secret room generation has been slightly increased for all heroes, and the Rogue has talents that help him find these secrets."));
 
-		changes.addButton(new ChangeButton(Icons.get(Icons.TALENT), "Tier One Talent Changes",
-				"Several _tier one talents_ have been changed based on feedback and gameplay data:\n\n" +
-				"_- Test Subject_ now triggers on identifying any item, but the healing it grants has been halved.\n\n" +
-				"_- Energizing Meal_ is now a T2 talent. In T1 it has been replaced by _Empowering Meal_, which grants bonus damage on wand zaps.\n" +
-				"_- Tested Hypothesis_ now triggers on identifying any item. It now also grants a small amount of recharging, instead of shielding.\n" +
-				"_- Energizing Upgrade_ is now a T2 talent. In T1 it has been replaced by _Backup Barrier_, which gives a small shield when the Mage's staff runs out of charge.\n\n" +
-				"_- Rationed Meal_ has been removed. It is replaced by _Cached Rations_, which allows the Rogue to find bonus food.\n" +
-				"_- Mending Shadow_ has been reworked. It is now _Protective Shadows_, which grants the Rogue shielding.\n\n" +
-				"_- Invigorating Meal_ is now a T2 talent. In T1 it has been replaced by _Nature's Bounty_, which allows the Huntress to find berries in grass."));
+//		changes.addButton(new ChangeButton(Icons.get(Icons.TALENT), "Tier One Talent Changes",
+//				"Several _tier one talents_ have been changed based on feedback and gameplay data:\n\n" +
+//				"_- Test Subject_ now triggers on identifying any item, but the healing it grants has been halved.\n\n" +
+//				"_- Energizing Meal_ is now a T2 talent. In T1 it has been replaced by _Empowering Meal_, which grants bonus damage on wand zaps.\n" +
+//				"_- Tested Hypothesis_ now triggers on identifying any item. It now also grants a small amount of recharging, instead of shielding.\n" +
+//				"_- Energizing Upgrade_ is now a T2 talent. In T1 it has been replaced by _Backup Barrier_, which gives a small shield when the Mage's staff runs out of charge.\n\n" +
+//				"_- Rationed Meal_ has been removed. It is replaced by _Cached Rations_, which allows the Rogue to find bonus food.\n" +
+//				"_- Mending Shadow_ has been reworked. It is now _Protective Shadows_, which grants the Rogue shielding.\n\n" +
+//				"_- Invigorating Meal_ is now a T2 talent. In T1 it has been replaced by _Nature's Bounty_, which allows the Huntress to find berries in grass."));
 
 		changes.addButton(new ChangeButton(Icons.get(Icons.PREFS), Messages.get(ChangesScene.class, "misc"),
 				"_-_ Statue grid rooms now appear in the Dwarven City, rather than the Prison.\n" +
@@ -543,11 +543,11 @@ public class v0_9_X_Changes {
 				"\n" +
 				"Dev commentary will be added here in the future."));
 
-		changes.addButton(new ChangeButton(Icons.get(Icons.TALENT), "Hero Talents!",
-				"_A new gameplay system has been added!_\n\n" +
-				"As you play the game and level up, you now unlock points to spend on hero talents. These talents have a range of effects, from stat adjustments to triggered effects to full on abilities!\n\n" +
-				"Talents are split into tiers, and to start only the first tier is available, which covers levels 1 to 6. More talents will be added soon!\n\n" +
-				"Previously I would have spent many more months on v0.9.0 and released the entire system in one update, but I'm changing up my strategy and splitting these big updates into smaller parts."));
+//		changes.addButton(new ChangeButton(Icons.get(Icons.TALENT), "Hero Talents!",
+//				"_A new gameplay system has been added!_\n\n" +
+//				"As you play the game and level up, you now unlock points to spend on hero talents. These talents have a range of effects, from stat adjustments to triggered effects to full on abilities!\n\n" +
+//				"Talents are split into tiers, and to start only the first tier is available, which covers levels 1 to 6. More talents will be added soon!\n\n" +
+//				"Previously I would have spent many more months on v0.9.0 and released the entire system in one update, but I'm changing up my strategy and splitting these big updates into smaller parts."));
 
 		changes.addButton(new ChangeButton(Icons.get(Icons.CHALLENGE_ON), "Hostile Champions!",
 				"A new challenge has been added: _Hostile Champions!_\n\n" +

@@ -67,7 +67,7 @@ public class WndInfoTalent extends Window {
 					onUpgradeButton.call();
 				}
 			};
-			upgrade.icon(Icons.get(Icons.TALENT));
+			//upgrade.icon(Icons.get(Icons.TALENT));
 			upgrade.setRect(0, txtInfo.bottom() + 2*GAP, WIDTH, 18);
 			add(upgrade);
 			resize( WIDTH, (int)upgrade.bottom()+1 );
