@@ -33,19 +33,19 @@ public class SkeletonSprite extends MobSprite {
 		
 		texture( Assets.Sprites.SKELETON );
 		
-		TextureFilm frames = new TextureFilm( texture, 12, 15 );
+		TextureFilm frames = new TextureFilm( texture, 16,22);
 		
 		idle = new Animation( 12, true );
-		idle.frames( frames, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 2, 3 );
+		idle.frames( frames, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1);
 		
 		run = new Animation( 15, true );
-		run.frames( frames, 4, 5, 6, 7, 8, 9 );
+		run.frames( frames, 2, 3, 4 );
 		
 		attack = new Animation( 15, false );
-		attack.frames( frames, 14, 15, 16 );
+		attack.frames( frames, 5, 6, 7 );
 		
 		die = new Animation( 12, false );
-		die.frames( frames, 10, 11, 12, 13 );
+		die.frames( frames, 8, 9, 10);
 		
 		play( idle );
 	}

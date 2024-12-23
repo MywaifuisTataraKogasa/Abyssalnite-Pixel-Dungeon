@@ -31,7 +31,7 @@ public class CausticSlimeSprite extends MobSprite {
 		
 		texture( Assets.Sprites.SLIME );
 		
-		TextureFilm frames = new TextureFilm( texture, 14, 12 );
+		TextureFilm frames = new TextureFilm( texture, 16, 16 );
 		
 		int c = 9;
 		
@@ -42,10 +42,10 @@ public class CausticSlimeSprite extends MobSprite {
 		run.frames( frames, c+0, c+2, c+3, c+3, c+2, c+0 );
 		
 		attack = new Animation( 15, false );
-		attack.frames( frames, c+2, c+3, c+4, c+6, c+5 );
+		attack.frames( frames, c+2, c+3, c+4, c+5, c+6 );
 		
 		die = new Animation( 10, false );
-		die.frames( frames, c+0, c+5, c+6, c+7 );
+		die.frames( frames, c+7, c+8, c+9 );
 		
 		play(idle);
 	}

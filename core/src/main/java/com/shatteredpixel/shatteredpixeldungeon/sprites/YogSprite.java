@@ -23,8 +23,12 @@ package com.shatteredpixel.shatteredpixeldungeon.sprites;
 
 import com.shatteredpixel.shatteredpixeldungeon.Assets;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
+import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.Yog;
+import com.shatteredpixel.shatteredpixeldungeon.effects.MagicMissile;
 import com.shatteredpixel.shatteredpixeldungeon.effects.Splash;
 import com.watabou.noosa.TextureFilm;
+import com.watabou.noosa.audio.Sample;
+import com.watabou.utils.Callback;
 
 public class YogSprite extends MobSprite {
 	
@@ -35,19 +39,21 @@ public class YogSprite extends MobSprite {
 
 		texture( Assets.Sprites.YOG );
 		
-		TextureFilm frames = new TextureFilm( texture, 20, 19 );
+		TextureFilm frames = new TextureFilm( texture, 32, 32 );
 		
 		idle = new Animation( 10, true );
-		idle.frames( frames, 0, 1, 2, 2, 1, 0, 3, 4, 4, 3, 0, 5, 6, 6, 5 );
+		idle.frames( frames, 0, 1);
 		
 		run = new Animation( 12, true );
 		run.frames( frames, 0 );
 		
 		attack = new Animation( 12, false );
-		attack.frames( frames, 0 );
+		attack.frames( frames, 2, 3, 4 );
 		
 		die = new Animation( 10, false );
-		die.frames( frames, 0, 7, 8, 9 );
+		die.frames( frames, 5, 6, 7, 8, 9 );
+
+		zap = attack.clone();
 		
 		play( idle );
 	}
@@ -56,6 +62,32 @@ public class YogSprite extends MobSprite {
 	public void link(Char ch) {
 		super.link(ch);
 		renderShadow = false;
+	}
+
+	public void zap( int cell ) {
+
+		turnTo( ch.pos , cell );
+		play( zap );
+
+		MagicMissile.boltFromChar( parent,
+				MagicMissile.RAINBOW,
+				this,
+				cell,
+				new Callback() {
+					@Override
+					public void call() {
+						((Yog)ch).onZapComplete();
+					}
+				} );
+		Sample.INSTANCE.play( Assets.Sounds.ZAP );
+	}
+
+	@Override
+	public void onComplete( Animation anim ) {
+		if (anim == zap) {
+			idle();
+		}
+		super.onComplete( anim );
 	}
 
 	@Override

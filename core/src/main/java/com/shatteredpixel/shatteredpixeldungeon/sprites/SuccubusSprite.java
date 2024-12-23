@@ -33,7 +33,7 @@ public class SuccubusSprite extends MobSprite {
 		
 		texture( Assets.Sprites.SUCCUBUS );
 		
-		TextureFilm frames = new TextureFilm( texture, 12, 15 );
+		TextureFilm frames = new TextureFilm( texture, 12, 18 );
 		
 		idle = new Animation( 8, true );
 		idle.frames( frames, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 2, 2, 2, 2, 1 );
@@ -53,7 +53,6 @@ public class SuccubusSprite extends MobSprite {
 	@Override
 	public void die() {
 		super.die();
-		emitter().burst( Speck.factory( Speck.HEART ), 6 );
 		emitter().burst( ShadowParticle.UP, 8 );
 	}
 }

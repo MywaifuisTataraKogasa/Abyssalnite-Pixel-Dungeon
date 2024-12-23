@@ -40,21 +40,21 @@ public class GolemSprite extends MobSprite {
 		
 		texture( Assets.Sprites.GOLEM );
 		
-		TextureFilm frames = new TextureFilm( texture, 17, 19 );
+		TextureFilm frames = new TextureFilm( texture, 24, 16 );
 		
 		idle = new Animation( 4, true );
 		idle.frames( frames, 0, 1 );
 		
-		run = new Animation( 12, true );
-		run.frames( frames, 2, 3, 4, 5 );
+		run = new Animation( 6, true );
+		run.frames( frames, 2, 3, 4);
 		
-		attack = new Animation( 10, false );
-		attack.frames( frames, 6, 7, 8 );
+		attack = new Animation( 6, false );
+		attack.frames( frames, 5, 6, 7 );
 
 		zap = attack.clone();
 		
-		die = new Animation( 15, false );
-		die.frames( frames, 9, 10, 11, 12, 13 );
+		die = new Animation( 9, false );
+		die.frames( frames, 8, 9, 10 );
 		
 		play( idle );
 	}
@@ -120,12 +120,9 @@ public class GolemSprite extends MobSprite {
 		Sample.INSTANCE.play( Assets.Sounds.ZAP );
 	}
 
-	private boolean died = false;
-
 	@Override
 	public void onComplete( Animation anim ) {
-		if (anim == die && !died) {
-			died = true;
+		if (anim == die) {
 			emitter().burst( ElmoParticle.FACTORY, 4 );
 		}
 		if (anim == zap) {

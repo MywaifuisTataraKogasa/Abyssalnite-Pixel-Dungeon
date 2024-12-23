@@ -20,22 +20,22 @@ public class WardSprite extends MobSprite {
 		texture(Assets.Sprites.WARDS);
 
 		tierIdles[1] = new Animation( 1, true );
-		tierIdles[1].frames(texture.uvRect(0, 0, 9, 10));
+		tierIdles[1].frames(texture.uvRect(0, 0, 5, 10));
 
 		tierIdles[2] = new Animation( 1, true );
-		tierIdles[2].frames(texture.uvRect(10, 0, 21, 12));
+		tierIdles[2].frames(texture.uvRect(7, 0, 13, 12));
 
 		tierIdles[3] = new Animation( 1, true );
-		tierIdles[3].frames(texture.uvRect(22, 0, 37, 16));
+		tierIdles[3].frames(texture.uvRect(14, 0, 23, 12));
 
 		tierIdles[4] = new Animation( 1, true );
-		tierIdles[4].frames(texture.uvRect(38, 0, 44, 13));
+		tierIdles[4].frames(texture.uvRect(24, 0, 37, 12));
 
 		tierIdles[5] = new Animation( 1, true );
-		tierIdles[5].frames(texture.uvRect(45, 0, 51, 15));
+		tierIdles[5].frames(texture.uvRect(38, 0, 51, 14));
 
 		tierIdles[6] = new Animation( 1, true );
-		tierIdles[6].frames(texture.uvRect(52, 0, 60, 15));
+		tierIdles[6].frames(texture.uvRect(52, 0, 65, 16));
 
 	}
 
@@ -137,8 +137,4 @@ public class WardSprite extends MobSprite {
 		}
 	}
 
-	@Override
-	public int blood() {
-		return 0xFFCC33FF;
-	}
 }

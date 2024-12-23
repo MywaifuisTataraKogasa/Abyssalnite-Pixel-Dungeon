@@ -31,19 +31,19 @@ public class ShieldedSprite extends MobSprite {
 		
 		texture( Assets.Sprites.BRUTE );
 		
-		TextureFilm frames = new TextureFilm( texture, 12, 16 );
+		TextureFilm frames = new TextureFilm( texture, 16, 16 );
 		
 		idle = new Animation( 2, true );
-		idle.frames( frames, 21, 21, 21, 22, 21, 21, 22, 22 );
+		idle.frames( frames, 12, 12, 12, 13, 12, 12,12 );
 		
 		run = new Animation( 12, true );
-		run.frames( frames, 25, 26, 27, 28 );
+		run.frames( frames, 14, 15, 16 );
 		
 		attack = new Animation( 12, false );
-		attack.frames( frames, 23, 24 );
+		attack.frames( frames, 17, 18, 19 );
 		
 		die = new Animation( 12, false );
-		die.frames( frames, 29, 30, 31 );
+		die.frames( frames, 20, 21, 22 );
 		
 		play( idle );
 	}

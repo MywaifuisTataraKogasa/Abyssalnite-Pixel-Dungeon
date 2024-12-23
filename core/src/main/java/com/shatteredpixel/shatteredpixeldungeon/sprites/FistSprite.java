@@ -23,6 +23,7 @@ package com.shatteredpixel.shatteredpixeldungeon.sprites;
 
 import com.shatteredpixel.shatteredpixeldungeon.Assets;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
+import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.Yog;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.YogFist;
 import com.shatteredpixel.shatteredpixeldungeon.effects.Beam;
 import com.shatteredpixel.shatteredpixeldungeon.effects.MagicMissile;
@@ -57,7 +58,7 @@ public abstract class FistSprite extends MobSprite {
 
 		texture( Assets.Sprites.FISTS );
 
-		TextureFilm frames = new TextureFilm( texture, 24, 17 );
+		TextureFilm frames = new TextureFilm( texture, 20, 18 );
 
 		idle = new Animation( 2, true );
 		idle.frames( frames, c+0, c+0, c+1 );
@@ -266,12 +267,23 @@ public abstract class FistSprite extends MobSprite {
 
 		@Override
 		public void zap( int cell ) {
+
 			turnTo( ch.pos , cell );
 			play( zap );
 
-			((YogFist)ch).onZapComplete();
-			parent.add( new Beam.LightRay(center(), DungeonTilemap.raisedTileCenterToWorld(cell)));
+			MagicMissile.boltFromChar( parent,
+					boltType,
+					this,
+					cell,
+					new Callback() {
+						@Override
+						public void call() {
+							((YogFist)ch).onZapComplete();
+						}
+					} );
+			Sample.INSTANCE.play( Assets.Sounds.ZAP );
 		}
+
 		@Override
 		public int blood() {
 			return 0xFFFFFFFF;

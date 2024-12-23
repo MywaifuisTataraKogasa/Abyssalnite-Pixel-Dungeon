@@ -31,21 +31,21 @@ public class SnakeSprite extends MobSprite {
 		
 		texture( Assets.Sprites.SNAKE );
 		
-		TextureFilm frames = new TextureFilm( texture, 12, 11 );
+		TextureFilm frames = new TextureFilm( texture, 16, 7 );
 		
 		//many frames here as we want the rising/falling to be slow but the tongue to be fast
 		idle = new Animation( 10, true );
-		idle.frames( frames, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-		                     1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 2, 3, 2, 1, 1);
+		idle.frames( frames, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 1,
+		                     0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 1);
 		
 		run = new Animation( 8, true );
-		run.frames( frames, 4, 5, 6, 7 );
+		run.frames( frames, 2, 3, 4 );
 		
 		attack = new Animation( 15, false );
-		attack.frames( frames, 8, 9, 10, 9, 0);
+		attack.frames( frames, 5, 6, 7);
 		
 		die = new Animation( 10, false );
-		die.frames( frames, 11, 12, 13 );
+		die.frames( frames, 8, 9, 10 );
 		
 		play(idle);
 	}

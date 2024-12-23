@@ -38,22 +38,22 @@ public class DM100Sprite extends MobSprite {
 		
 		texture( Assets.Sprites.DM100 );
 		
-		TextureFilm frames = new TextureFilm( texture, 16, 14 );
+		TextureFilm frames = new TextureFilm( texture, 16, 16 );
 		
 		idle = new Animation( 1, true );
 		idle.frames( frames, 0, 1 );
 
 		run = new Animation( 12, true );
-		run.frames( frames, 6, 7, 8, 9 );
+		run.frames( frames, 2, 3, 4 );
 		
-		attack = new Animation( 12, false );
-		attack.frames( frames, 2, 3, 4, 0 );
+		attack = new Animation( 20, false );
+		attack.frames( frames, 5, 6, 7 );
 
-		zap = new Animation( 8, false );
-		zap.frames( frames, 5, 5, 1 );
+		zap = new Animation( 20, false );
+		zap.frames( frames, 5, 6, 7 );
 
 		die = new Animation( 12, false );
-		die.frames( frames, 10, 11, 12, 13, 14, 15 );
+		die.frames( frames, 8, 9, 10 );
 		
 		play( idle );
 	}
@@ -65,11 +65,11 @@ public class DM100Sprite extends MobSprite {
 		//shoot lightning from eye, not sprite center.
 		PointF origin = center();
 		if (flipHorizontal){
-			origin.y -= 6*scale.y;
-			origin.x -= 1*scale.x;
+			origin.y -= 11*scale.y;
+			origin.x -= 5*scale.x;
 		} else {
-			origin.y -= 8*scale.y;
-			origin.x += 1*scale.x;
+			origin.y -= 11*scale.y;
+			origin.x += 5*scale.x;
 		}
 		if (enemy != null) {
 			parent.add(new Lightning(origin, enemy.sprite.destinationCenter(), (DM100) ch));
@@ -95,10 +95,5 @@ public class DM100Sprite extends MobSprite {
 			idle();
 		}
 		super.onComplete( anim );
-	}
-
-	@Override
-	public int blood() {
-		return 0xFFFFFF88;
 	}
 }

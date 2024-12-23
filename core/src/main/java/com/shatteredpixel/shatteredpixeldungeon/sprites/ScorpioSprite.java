@@ -36,21 +36,21 @@ public class ScorpioSprite extends MobSprite {
 		
 		texture( Assets.Sprites.SCORPIO );
 		
-		TextureFilm frames = new TextureFilm( texture, 18, 17 );
+		TextureFilm frames = new TextureFilm( texture, 16, 16 );
 		
 		idle = new Animation( 12, true );
-		idle.frames( frames, 0, 0, 0, 0, 0, 0, 0, 0, 1, 2, 1, 2, 1, 2 );
+		idle.frames( frames, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1 );
 		
-		run = new Animation( 8, true );
-		run.frames( frames, 5, 5, 6, 6 );
+		run = new Animation( 12, true );
+		run.frames( frames, 1, 1, 2, 2 );
 		
 		attack = new Animation( 15, false );
-		attack.frames( frames, 0, 3, 4 );
+		attack.frames( frames, 2, 3, 4 );
 		
 		zap = attack.clone();
 		
 		die = new Animation( 12, false );
-		die.frames( frames, 0, 7, 8, 9, 10 );
+		die.frames( frames, 5, 6, 7);
 		
 		play( idle );
 	}

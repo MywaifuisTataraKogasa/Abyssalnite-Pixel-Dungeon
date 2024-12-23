@@ -25,8 +25,6 @@ import com.shatteredpixel.shatteredpixeldungeon.Assets;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.DM200;
 import com.shatteredpixel.shatteredpixeldungeon.effects.MagicMissile;
 import com.shatteredpixel.shatteredpixeldungeon.effects.Speck;
-import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
-import com.shatteredpixel.shatteredpixeldungeon.utils.GLog;
 import com.watabou.noosa.TextureFilm;
 import com.watabou.noosa.audio.Sample;
 import com.watabou.utils.Callback;
@@ -38,9 +36,9 @@ public class DM200Sprite extends MobSprite {
 
 		texture( Assets.Sprites.DM200 );
 
-		TextureFilm frames = new TextureFilm( texture, 21, 18 );
+		TextureFilm frames = new TextureFilm( texture, 16, 16 );
 
-		idle = new Animation( 10, true );
+		idle = new Animation( 5, true );
 		idle.frames( frames, 0, 1 );
 
 		run = new Animation( 10, true );
@@ -74,7 +72,6 @@ public class DM200Sprite extends MobSprite {
 					}
 				} );
 		Sample.INSTANCE.play( Assets.Sounds.GAS );
-		GLog.w(Messages.get(DM200.class, "vent"));
 	}
 
 	@Override
@@ -95,11 +92,6 @@ public class DM200Sprite extends MobSprite {
 			idle();
 		}
 		super.onComplete( anim );
-	}
-
-	@Override
-	public int blood() {
-		return 0xFFFFFF88;
 	}
 
 }

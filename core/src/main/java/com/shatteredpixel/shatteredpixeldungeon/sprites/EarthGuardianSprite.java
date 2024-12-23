@@ -29,7 +29,7 @@ public class EarthGuardianSprite extends MobSprite {
 
 	@Override
 	public int blood() {
-		return 0xFF966400;
+		return 0xFFcdcdb7;
 	}
 
 }
