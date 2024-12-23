@@ -27,7 +27,6 @@ import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
 import com.shatteredpixel.shatteredpixeldungeon.ShatteredPixelDungeon;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Actor;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
-import com.shatteredpixel.shatteredpixeldungeon.actors.blobs.Blob;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.Mob;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.OldTengu;
 import com.shatteredpixel.shatteredpixeldungeon.items.Heap;
@@ -44,7 +43,6 @@ import com.shatteredpixel.shatteredpixeldungeon.plants.Plant;
 import com.shatteredpixel.shatteredpixeldungeon.scenes.GameScene;
 import com.shatteredpixel.shatteredpixeldungeon.tiles.CustomTilemap;
 import com.shatteredpixel.shatteredpixeldungeon.ui.TargetHealthIndicator;
-import com.shatteredpixel.shatteredpixeldungeon.utils.BArray;
 import com.watabou.noosa.Group;
 import com.watabou.noosa.Tilemap;
 import com.watabou.noosa.audio.Sample;
@@ -616,7 +614,7 @@ public class OldPrisonBossLevel extends Level {
 	public static class exitVisual extends CustomTilemap {
 		
 		{
-			texture = Assets.Environment.PRISON_EXIT_OLD;
+			texture = Assets.Environment.PRISON_EXIT;
 			
 			tileW = 12;
 			tileH = 14;
@@ -659,7 +657,7 @@ public class OldPrisonBossLevel extends Level {
 	public static class exitVisualWalls extends CustomTilemap {
 		
 		{
-			texture = Assets.Environment.PRISON_EXIT_OLD;
+			texture = Assets.Environment.PRISON_EXIT;
 			
 			tileW = 12;
 			tileH = 14;

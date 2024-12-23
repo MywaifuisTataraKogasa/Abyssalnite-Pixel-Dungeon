@@ -202,11 +202,16 @@ public class ItemSpriteSheet {
 	public static final int RAPIER          = WEP_TIER1+3;
 	public static final int DAGGER          = WEP_TIER1+4;
 	public static final int MAGES_STAFF     = WEP_TIER1+5;
+
+	public static final int FLUTE    		= WEP_TIER1+6;
+
 	static{
 		assignItemRect(WORN_SHORTSWORD, 13, 13);
 		assignItemRect(GLOVES,          12, 16);
 		assignItemRect(DAGGER,          12, 13);
 		assignItemRect(MAGES_STAFF,     15, 16);
+
+		assignItemRect(FLUTE,     14, 14);
 	}
 
 	private static final int WEP_TIER2      =                               xy(9, 7);   //8 slots
@@ -632,7 +637,13 @@ public class ItemSpriteSheet {
 	public static final int MEAT_PIE    = FOOD+9;
 	public static final int BLANDFRUIT  = FOOD+10;
 	public static final int BLAND_CHUNKS= FOOD+11;
-	public static final int BERRY =       FOOD+12;
+//	public static final int BERRY =       FOOD+12;
+
+	public static final int PUDDING= FOOD+12;
+	public static final int ABYSSALBOTTLE= FOOD+13;
+	public static final int ABYSSALFRUIT= FOOD+14;
+	public static final int ABYSSALCURE= FOOD+15;
+
 	static{
 		assignItemRect(MEAT,        15, 11);
 		assignItemRect(STEAK,       15, 11);
@@ -646,7 +657,11 @@ public class ItemSpriteSheet {
 		assignItemRect(MEAT_PIE,    16, 12);
 		assignItemRect(BLANDFRUIT,  9,  12);
 		assignItemRect(BLAND_CHUNKS,14, 6);
-		assignItemRect(BERRY,       9,  11);
+
+		assignItemRect(PUDDING,15, 13);
+		assignItemRect(ABYSSALBOTTLE,10, 13);
+		assignItemRect(ABYSSALFRUIT,10, 12);
+		assignItemRect(ABYSSALCURE,9, 13);
 	}
 
 	private static final int QUEST  =                                       xy(1, 29);  //32 slots

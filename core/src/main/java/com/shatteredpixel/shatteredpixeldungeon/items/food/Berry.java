@@ -33,19 +33,10 @@ import com.shatteredpixel.shatteredpixeldungeon.sprites.ItemSpriteSheet;
 public class Berry extends Food {
 
 	{
-		image = ItemSpriteSheet.BERRY;
+		image = ItemSpriteSheet.FLAIL;
 		energy = Hunger.HUNGRY/3f; //100 food value
 
 		bones = false;
-	}
-
-	@Override
-	protected float eatingTime(){
-		if (Dungeon.hero.hasTalent(Talent.INVIGORATING_MEAL)){
-			return 0;
-		} else {
-			return 1;
-		}
 	}
 
 	@Override

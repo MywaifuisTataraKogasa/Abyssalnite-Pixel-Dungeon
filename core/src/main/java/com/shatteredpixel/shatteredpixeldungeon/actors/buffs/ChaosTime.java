@@ -22,7 +22,7 @@ public class ChaosTime extends FlavourBuff {
     public boolean act() {
         super.act();
         if (Random.Int(100) >= 14);
-            ((Hero) target).spend( TICK );
+        ((Hero) target).spend( TICK );
         GLog.w(Messages.get(this, "message"));
         return true;
     }

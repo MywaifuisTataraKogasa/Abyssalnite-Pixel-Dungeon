@@ -21,10 +21,15 @@
 
 package com.shatteredpixel.shatteredpixeldungeon.levels;
 
+import static com.shatteredpixel.shatteredpixeldungeon.Dungeon.hero;
+import static com.shatteredpixel.shatteredpixeldungeon.Dungeon.level;
+import static com.shatteredpixel.shatteredpixeldungeon.levels.Terrain.PEDESTAL;
+import static com.shatteredpixel.shatteredpixeldungeon.levels.Terrain.SP_RUNE;
+import static com.shatteredpixel.shatteredpixeldungeon.levels.Terrain.WELL;
+
 import com.shatteredpixel.shatteredpixeldungeon.Assets;
 import com.shatteredpixel.shatteredpixeldungeon.Bones;
 import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
-import com.shatteredpixel.shatteredpixeldungeon.Statistics;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Actor;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
 import com.shatteredpixel.shatteredpixeldungeon.actors.blobs.Blob;
@@ -36,21 +41,15 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Light;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.MaxGuard;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.Mob;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.NewTengu;
-import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.Rat;
 import com.shatteredpixel.shatteredpixeldungeon.effects.CellEmitter;
 import com.shatteredpixel.shatteredpixeldungeon.effects.Speck;
 import com.shatteredpixel.shatteredpixeldungeon.items.Heap;
 import com.shatteredpixel.shatteredpixeldungeon.items.Item;
 import com.shatteredpixel.shatteredpixeldungeon.items.keys.IronKey;
-import com.shatteredpixel.shatteredpixeldungeon.items.quest.CeremonialCandle;
 import com.shatteredpixel.shatteredpixeldungeon.items.quest.MysteryHeart;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.missiles.HeavyBoomerang;
 import com.shatteredpixel.shatteredpixeldungeon.levels.painters.Painter;
-import com.shatteredpixel.shatteredpixeldungeon.levels.painters.PrisonPainter;
-import com.shatteredpixel.shatteredpixeldungeon.levels.painters.SewerPainter;
 import com.shatteredpixel.shatteredpixeldungeon.levels.rooms.Room;
-import com.shatteredpixel.shatteredpixeldungeon.levels.rooms.standard.RitualSiteRoom;
-import com.shatteredpixel.shatteredpixeldungeon.levels.traps.DisintegrationTrap;
 import com.shatteredpixel.shatteredpixeldungeon.levels.traps.TenguDartTrap;
 import com.shatteredpixel.shatteredpixeldungeon.levels.traps.Trap;
 import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
@@ -59,7 +58,6 @@ import com.shatteredpixel.shatteredpixeldungeon.scenes.GameScene;
 import com.shatteredpixel.shatteredpixeldungeon.tiles.CustomTilemap;
 import com.shatteredpixel.shatteredpixeldungeon.ui.TargetHealthIndicator;
 import com.shatteredpixel.shatteredpixeldungeon.utils.BArray;
-import com.shatteredpixel.shatteredpixeldungeon.utils.GLog;
 import com.watabou.noosa.Camera;
 import com.watabou.noosa.Group;
 import com.watabou.noosa.Tilemap;
@@ -73,13 +71,6 @@ import com.watabou.utils.Random;
 import com.watabou.utils.Rect;
 
 import java.util.ArrayList;
-
-import static com.shatteredpixel.shatteredpixeldungeon.Dungeon.hero;
-import static com.shatteredpixel.shatteredpixeldungeon.Dungeon.level;
-import static com.shatteredpixel.shatteredpixeldungeon.levels.Terrain.EMPTY_DECO;
-import static com.shatteredpixel.shatteredpixeldungeon.levels.Terrain.PEDESTAL;
-import static com.shatteredpixel.shatteredpixeldungeon.levels.Terrain.SP_RUNE;
-import static com.shatteredpixel.shatteredpixeldungeon.levels.Terrain.WELL;
 
 public class NewPrisonBossLevel extends Level {
 
@@ -934,7 +925,7 @@ public class NewPrisonBossLevel extends Level {
 		public String name(int tileX, int tileY) {
 			int cell = (this.tileX+tileX) + Dungeon.level.width()*(this.tileY+tileY);
 			if (Dungeon.level.traps.get(cell) != null){
-				return Messages.titleCase(Dungeon.level.traps.get(cell).name);
+				return Messages.titleCase(Dungeon.level.traps.get(cell).name());
 			}
 			return super.name(tileX, tileY);
 		}
@@ -993,7 +984,7 @@ public class NewPrisonBossLevel extends Level {
 	public static class exitVisual extends CustomTilemap {
 
 		{
-			texture = Assets.Environment.PRISON_EXIT_NEW;
+			texture = Assets.Environment.PRISON_EXIT;
 
 			tileW = 14;
 			tileH = 11;
@@ -1039,7 +1030,7 @@ public class NewPrisonBossLevel extends Level {
 	public static class exitVisualWalls extends CustomTilemap {
 
 		{
-			texture = Assets.Environment.PRISON_EXIT_NEW;
+			texture = Assets.Environment.PRISON_EXIT;
 
 			tileW = 14;
 			tileH = 22;

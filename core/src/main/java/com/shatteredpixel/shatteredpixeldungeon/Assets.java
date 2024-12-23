@@ -117,6 +117,20 @@ public class Assets {
 
 		public static final String SEWERS_1		= "music/sewers_1.ogg";
 		public static final String SEWERS_2		= "music/sewers_2.ogg";
+
+		//TODO 坠渊音乐
+		public static final String TEMPLE	= "music/bgm1.ogg";
+		public static final String UNDER	= "music/bgm2.ogg";
+		public static final String MINE	    = "music/bgm3.ogg";
+		public static final String NETHER	= "music/bgm4.ogg";
+		public static final String ABYSS	= "music/bgm5.ogg";
+		public static final String NIGHTMARE	= "music/bgm6.ogg";
+		public static final String BOSS1	= "music/boss1.ogg";
+		public static final String BOSS2	= "music/boss2.ogg";
+		public static final String BOSS3	= "music/boss3.ogg";
+		public static final String BOSS4	= "music/boss4.ogg";
+		public static final String BOSS5	= "music/boss5.ogg";
+		public static final String BOSS6	= "music/boss6.ogg";
 	}
 
 	public static class Sounds {
@@ -189,6 +203,8 @@ public class Assets {
 		public static final String CHAINS   = "sounds/chains.mp3";
 		public static final String SCAN     = "sounds/scan.mp3";
 		public static final String SHEEP    = "sounds/sheep.mp3";
+		public static final String PUDDING    = "sounds/pudding.mp3";
+		public static final String CURE		= "sounds/cureinfuse.mp3";
 
 		public static final String[] all = new String[]{
 				CLICK, BADGE, GOLD,
@@ -201,7 +217,7 @@ public class Assets {
 				DESCEND, EAT, READ, LULLABY, DRINK, SHATTER, ZAP, LIGHTNING, LEVELUP, DEATH,
 				CHALLENGE, CURSED, TRAP, EVOKE, TOMB, ALERT, MELD, BOSS, BLAST, PLANT, RAY, BEACON,
 				TELEPORT, CHARMS, MASTERY, PUFF, ROCKS, BURNING, FALLING, GHOST, SECRET, BONES,
-				BEE, DEGRADE, MIMIC, DEBUFF, CHARGEUP, GAS, CHAINS, SCAN, SHEEP
+				BEE, DEGRADE, MIMIC, DEBUFF, CHARGEUP, GAS, CHAINS, SCAN, SHEEP, PUDDING, CURE
 		};
 	}
 
@@ -278,5 +294,8 @@ public class Assets {
 		public static final String LOTUS	= "sprites/lotus.png";
 		public static final String NINJA_LOG= "sprites/ninja_log.png";
 		public static final String SPIRIT_HAWK= "sprites/spirit_hawk.png";
+
+		public static final String CODEE	= "sprites/codee.png";
+		public static final String PILLAR	= "sprites/pillar.png";
 	}
 }

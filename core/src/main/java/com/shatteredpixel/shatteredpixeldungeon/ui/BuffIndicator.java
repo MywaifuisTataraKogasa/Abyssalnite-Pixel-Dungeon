@@ -28,10 +28,8 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Buff;
 import com.shatteredpixel.shatteredpixeldungeon.scenes.GameScene;
 import com.shatteredpixel.shatteredpixeldungeon.scenes.PixelScene;
 import com.shatteredpixel.shatteredpixeldungeon.windows.WndInfoBuff;
-import com.watabou.gltextures.SmartTexture;
 import com.watabou.gltextures.TextureCache;
 import com.watabou.noosa.Image;
-import com.watabou.noosa.TextureFilm;
 import com.watabou.noosa.audio.Sample;
 import com.watabou.noosa.tweeners.AlphaTweener;
 import com.watabou.noosa.ui.Component;
@@ -100,6 +98,10 @@ public class BuffIndicator extends Component {
 	public static final int MOMENTUM    = 51;
 	public static final int ANKH        = 52;
 	public static final int NOINV       = 53;
+
+	public static final int DreadPlague     = 54;
+	public static final int ABYSSALINFECTION     = 55;
+	public static final int SLOW     = 56;
 
 	public static final int SIZE    = 7;
 	

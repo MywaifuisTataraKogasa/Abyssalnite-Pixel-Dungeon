@@ -1,5 +1,7 @@
 package com.shatteredpixel.shatteredpixeldungeon.actors.mobs;
 
+import static com.shatteredpixel.shatteredpixeldungeon.Dungeon.hero;
+
 import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
 import com.shatteredpixel.shatteredpixeldungeon.Statistics;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Actor;
@@ -25,12 +27,10 @@ import com.shatteredpixel.shatteredpixeldungeon.effects.Speck;
 import com.shatteredpixel.shatteredpixeldungeon.effects.TargetedCell;
 import com.shatteredpixel.shatteredpixeldungeon.effects.particles.PurpleParticle;
 import com.shatteredpixel.shatteredpixeldungeon.levels.FinalLevel;
-import com.shatteredpixel.shatteredpixeldungeon.levels.NewCavesBossLevel;
 import com.shatteredpixel.shatteredpixeldungeon.mechanics.Ballistica;
 import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
 import com.shatteredpixel.shatteredpixeldungeon.scenes.GameScene;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.PillarSprite;
-import com.shatteredpixel.shatteredpixeldungeon.sprites.PylonSprite;
 import com.shatteredpixel.shatteredpixeldungeon.tiles.DungeonTilemap;
 import com.shatteredpixel.shatteredpixeldungeon.utils.GLog;
 import com.watabou.utils.Bundle;
@@ -40,10 +40,6 @@ import com.watabou.utils.Random;
 
 import java.util.ArrayList;
 import java.util.HashSet;
-
-
-
-import static com.shatteredpixel.shatteredpixeldungeon.Dungeon.hero;
 
 public abstract class SeptiumPillar extends Mob {
 
@@ -82,17 +78,17 @@ public abstract class SeptiumPillar extends Mob {
     @Override
     protected boolean act()
 
+    {
+        if (alignment == Alignment.NEUTRAL){
+            next();
+        }
+        else
         {
-            if (alignment == Alignment.NEUTRAL){
-                next();
-            }
-            else
-                {
             onZapComplete();
             state = PASSIVE;
-            }
-        return super.act();
         }
+        return super.act();
+    }
 
     @Override
     public void notice() {
@@ -208,9 +204,9 @@ public abstract class SeptiumPillar extends Mob {
             for (Mob mob : Dungeon.level.mobs.toArray(new Mob[0])) {
                 if(!mob.properties().contains(Property.KISEKI)) {
                     Buff.affect(mob, FireImbue.class).set( 10f);
-                    }
-                    next();
                 }
+                next();
+            }
             GLog.w(Messages.get( this, "message") );
             spend(15f);
         }
@@ -472,8 +468,8 @@ public abstract class SeptiumPillar extends Mob {
                     }
                 }
                 else
-                // don't want to overly punish players with slow move or attack speed
-                spend(GameMath.gate(TICK, hero.cooldown(), 3 * TICK));
+                    // don't want to overly punish players with slow move or attack speed
+                    spend(GameMath.gate(TICK, hero.cooldown(), 3 * TICK));
                 hero.interrupt();
 
                 abilityCooldown += Random.NormalFloat(MIN_ABILITY_CD, MAX_ABILITY_CD);
@@ -523,18 +519,18 @@ public abstract class SeptiumPillar extends Mob {
             Buff.affect( hero, Vertigo.class, 3f);
             for (Mob mob : Dungeon.level.mobs.toArray( new Mob[0] )) {
                 mob.beckon( hero.pos );
-                }
+            }
             hero.sprite.centerEmitter().start( Speck.factory( Speck.SCREAM ), 0.3f, 3 );
             GLog.w(Messages.get( this, "message") );
             spend(15f);
-            }
-
-
-
-
         }
 
 
 
+
     }
+
+
+
+}
 

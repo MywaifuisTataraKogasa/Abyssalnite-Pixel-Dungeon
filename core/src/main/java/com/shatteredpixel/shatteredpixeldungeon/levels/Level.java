@@ -46,7 +46,6 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.hero.HeroSubClass;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Talent;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.abilities.huntress.SpiritHawk;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.Bestiary;
-import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.Mimic;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.Mob;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.YogFist;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.npcs.Sheep;
@@ -1354,4 +1353,53 @@ public abstract class Level implements Bundlable {
 				return "";
 		}
 	}
+
+
+	//静态地图改变的轮子调用
+	public void changeMap(int[] map){
+		//构建全新地图，通过MAPCSV构建，并清理当前地块
+		this.map = map.clone();
+		buildFlagMaps();
+		cleanWalls();
+
+		//清理掉落物 可选项
+		for (Heap heap : heaps.valueList()){
+			heap.destroy();
+		}
+
+		//自动获取出入口
+		exit = entrance = 0;
+		for (int i = 0; i < length(); i ++)
+			if (map[i] == Terrain.ENTRANCE)
+				entrance = i;
+			else if (map[i] == Terrain.EXIT)
+				exit = i;
+
+		//可见性和地图被完全重置
+		BArray.setFalse(visited);
+		BArray.setFalse(mapped);
+
+		//清除全部Blob
+		for (Blob blob: blobs.values()){
+			blob.fullyClear();
+		}
+		//重置地图的视觉
+		addVisuals();
+
+		//重新渲染地图
+		GameScene.resetMap();
+		Dungeon.observe();
+	}
+
+	/**定义七塔组*/
+	public Mob createTownMob() {
+		if (mobsToSpawn == null || mobsToSpawn.isEmpty()) {
+			mobsToSpawn = Bestiary.getTownMobRotation(Dungeon.depth);
+
+		}
+
+		return Reflection.newInstance(mobsToSpawn.remove(0));
+	}
+
+
 }

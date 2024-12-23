@@ -21,6 +21,7 @@
 
 package com.shatteredpixel.shatteredpixeldungeon.actors.mobs;
 
+import com.shatteredpixel.shatteredpixeldungeon.Statistics;
 import com.watabou.utils.Random;
 
 import java.util.ArrayList;
@@ -34,6 +35,66 @@ public class Bestiary {
 		swapMobAlts(mobs);
 		Random.shuffle(mobs);
 		return mobs;
+	}
+
+	/**定义七塔组*/
+	public static ArrayList<Class<? extends Mob>> getTownMobRotation( int depth ){
+		ArrayList<Class<? extends Mob>> mobs = result;
+		GroundMobs(mobs);
+		WaterMobs(mobs);
+		FlameMobs(mobs);
+		WindMobs(mobs);
+		addHighMobs(depth, mobs);
+		Random.shuffle(mobs);
+		return mobs;
+	}
+
+	public static void addHighMobs( int depth, ArrayList<Class<?extends Mob>> rotation ){
+
+		switch (depth){
+
+			// Sewers
+			default:
+				return;
+			case 1:
+				//for debug
+				float spawn1 = Random.Float() ;
+				if (spawn1 < 0.031f) rotation.add(ChronosSkull.class);
+				if (0.031f <= spawn1 && spawn1 < 0.061f) rotation.add(HeavenDoor.class);
+				if (0.061f <= spawn1 && spawn1 < 0.091f) rotation.add(PhantomSpirit.class);
+			case 28:
+				float spawn = Random.Float() ;
+				if (spawn < 0.031f) rotation.add(ChronosSkull.class);
+				if (0.031f <= spawn && spawn < 0.061f) rotation.add(HeavenDoor.class);
+				if (0.061f <= spawn && spawn < 0.091f) rotation.add(PhantomSpirit.class);
+				return;
+		}
+	}
+
+	/**定义塔组怪物
+	 * 根据你的枚举生成怪物 You know?*/
+
+	static ArrayList<Class<? extends Mob>> result = new ArrayList<>();
+	//放外面保证都能加上
+	private static void GroundMobs(ArrayList<Class<? extends Mob>>result1) {
+		if (Statistics.FirstActive) {
+			result.add(GroundStatue.class);
+		}
+	}
+	private static void WaterMobs(ArrayList<Class<? extends Mob>>result2) {
+		if (Statistics.SecondActive) {
+			result.add(WaterFlower.class);
+		}
+	}
+	private static void FlameMobs(ArrayList<Class<? extends Mob>>result3) {
+		if (Statistics.ThirdActive) {
+			result.add(FlameDemon.class);
+		}
+	}
+	private static void WindMobs(ArrayList<Class<? extends Mob>>result4) {
+		if (Statistics.FourthActive) {
+			result.add(WindSwarm.class);
+		}
 	}
 	
 	//returns a rotation of standard mobs, unshuffled.
@@ -205,8 +266,7 @@ public class Bestiary {
 			// City
 			case 19:
 				if (Random.Float() < 0.025f) rotation.add(Succubus.class);
-				return;
-		}
+        }
 	}
 	
 	//switches out regular mobs for their alt versions when appropriate
